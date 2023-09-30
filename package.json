@@ -1,0 +1,29 @@
+{
+  "name": "spaces-registry",
+  "version": "1.0.0",
+  "description": "Lamina1 Spaces Registry",
+  "main": "index.js",
+  "scripts": {
+    "start": "./local/start.sh",
+    "stop": "./local/stop.sh",
+    "deploy": "npx hardhat run scripts/deploy.ts",
+    "fund": "npx hardhat run scripts/fund.ts",
+    "compile": "npx hardhat compile",
+    "types": "npx hardhat typechain",
+    "test": "npx hardhat --network hardhat test",
+    "test:gas": "REPORT_GAS=true npx hardhat --network hardhat test",
+    "coverage": "CODE_COVERAGE=true npx hardhat coverage"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^3.0.0",
+    "chai": "^4.3.7",
+    "dotenv": "^16.3.1",
+    "hardhat": "^2.17.0",
+    "readline-sync": "^1.4.10"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.3.2"
+  }
+}
