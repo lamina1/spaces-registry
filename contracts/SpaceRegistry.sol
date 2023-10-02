@@ -6,6 +6,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/utils/introspection/ERC165Checker.sol";
 import "./interfaces/ISpaceItem.sol";
+import "./libraries/StringUtils.sol";
 
 /* Type definitions */
 
@@ -53,11 +54,19 @@ struct Space {
     ISpaceItem trophy;
 }
 
+///////////////////////////////////
+// Errors
+error NameTooShort(string name);
+error NameTooLong(string name);
+error UrlTooShort(string name);
+error UrlTooLong(string name);
+
 contract SpaceRegistry is Ownable, Pausable {
     ///////////////////////////////////
     // State
 
     using Counters for Counters.Counter;
+    using StringUtils for string;
 
     // Space registration price
     uint256 public price;
@@ -143,6 +152,8 @@ contract SpaceRegistry is Ownable, Pausable {
 
     // Register a new space
     // Can be called by anyone
+    // NOTE: caller must be an authorized owner of all ISpaceItem contracts referenced in the achievements and trophy
+    // as defined in the ISpaceItem interface
     function registerSpace(
         SpaceInfo calldata info,
         Achievement[] calldata achievements,
@@ -158,13 +169,37 @@ contract SpaceRegistry is Ownable, Pausable {
         // Validate trophy if set
         if (address(trophy) != address(0)) {
             require(checkItem(address(trophy)), "Trophy is not a valid ISpaceItem");
+            require(trophy.authorized(msg.sender), "sender is not authorized owner of Trophy");
         }
 
         // Validate achievements
         for (uint256 i = 0; i < achievements.length; i++) {
             require(checkItem(address(achievements[i].item)), "Achievement item is not a valid ISpaceItem");
+            require(achievements[i].item.authorized(msg.sender), "sender is not authorized owner of Achievement item");
         }
-        
+
+        // Validate name
+        // NOTE: some UTF-8 codes are more than 1 char
+        uint256 strLen = info.name.strlen();
+        // Check len
+        if (strLen < 1) {
+            revert NameTooShort(info.name);
+        }
+        if (strLen > 255) {
+            revert NameTooLong(info.name);
+        }
+
+        // Validate url
+        // NOTE: some UTF-8 codes are more than 1 char
+        strLen = info.url.strlen();
+        // Check len
+        if (strLen < 1) {
+            revert UrlTooShort(info.url);
+        }
+        if (strLen > 255) {
+            revert UrlTooLong(info.url);
+        }
+
         // Create space
         uint256 spaceId = _spaceIds.current();
         _spaceIds.increment();

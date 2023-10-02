@@ -18,6 +18,10 @@ contract BaseItem is ERC1155, AccessControl, ISpaceItem {
     }
 
     // Implement ISpaceItem
+    function authorized(address account) public view override returns (bool) {
+        return hasRole(DEFAULT_ADMIN_ROLE, account);
+    }
+
     function mint(address account, uint256 id, uint256 amount, bytes memory data)
         public
         virtual
