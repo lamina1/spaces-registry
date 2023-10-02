@@ -82,7 +82,8 @@ contract SpaceRegistry is Ownable, Pausable {
 
     ///////////////////////////////////
     // Events
-    event SpaceRegistered(uint256 indexed id, string indexed name);
+    event SpaceRegistered(uint256 indexed id, string name, string url, bool active);
+    event SpaceActive(uint256 indexed id, bool active);
     event AchievementUnlocked(uint256 indexed spaceId, uint256 indexed achievementIdx, address indexed account);
     event TrophyWon(uint256 indexed spaceId, address indexed account);
 
@@ -212,7 +213,7 @@ contract SpaceRegistry is Ownable, Pausable {
         _spaces[spaceId].trophy = trophy;
 
         // Emit event
-        emit SpaceRegistered(spaceId, info.name);
+        emit SpaceRegistered(spaceId, info.name, info.url, info.active);
     }
 
     // Enable/disable a space
@@ -220,6 +221,7 @@ contract SpaceRegistry is Ownable, Pausable {
     function setActive(uint256 spaceId, bool active) external {
         _checkOwnerOrSpaceOwner(spaceId);
         _spaces[spaceId].info.active = active;
+        emit SpaceActive(spaceId, active);
     }
 
     // Mint the achievement of a Space
