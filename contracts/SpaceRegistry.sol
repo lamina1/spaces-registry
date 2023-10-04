@@ -267,12 +267,12 @@ contract SpaceRegistry is Ownable, Pausable {
         return _spaces[spaceId].achievements.length;
     }
 
-    function getAchievement(uint256 spaceId, uint256 idx) public view returns (uint256, uint256) {
-        return (_spaces[spaceId].achievements[idx].points, _spaces[spaceId].achievements[idx].duration);
+    function getAchievement(uint256 spaceId, uint256 idx) public view returns (Achievement memory) {
+        return _spaces[spaceId].achievements[idx];
     }
 
-    function hasTrophy(uint256 spaceId) public view returns (bool) {
-        return address(_spaces[spaceId].trophy) != address(0);
+    function getTrophy(uint256 spaceId) public view returns (address) {
+        return address(_spaces[spaceId].trophy);
     }
 
     ///////////////////////////////////
