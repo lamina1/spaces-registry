@@ -167,6 +167,9 @@ contract SpaceRegistry is Ownable, Pausable {
         // Check price
         require(msg.value == price, "Registration value is not correct");
 
+        // Ensure at least 1 achievement
+        require(achievements.length > 0, "At least 1 achievement is required");
+
         // Validate trophy if set
         if (address(trophy) != address(0)) {
             require(checkItem(address(trophy)), "Trophy is not a valid ISpaceItem");
