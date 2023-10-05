@@ -37,12 +37,13 @@ async function main() {
   };
 
   // Items
-  const baseLaserFactory = await ethers.getContractFactory("BaseLaser");
-  const randomLaserFactory = await ethers.getContractFactory("RandomLaser");
+  const itemFactory = await ethers.getContractFactory("SpaceLasersItem");
   const trophyFactory = await ethers.getContractFactory("SpaceLasersTrophy");
   const items: [string, BaseItem__factory][] = [
-    ["ipfs://...../{id}.json", baseLaserFactory],
-    ["ipfs://...../metadata.json", randomLaserFactory],
+    [
+      "ipfs://bafybeiah7lh2r55hkuvzcoaqmvl5dkhzu7tyceqvldjieuy5rarsem7iki/", // IPFS link from old space lasers for testing
+      itemFactory,
+    ],
   ];
   const trophy: [string, BaseItem__factory] = [
     "ipfs://...../metadata.json",
@@ -95,8 +96,8 @@ async function main() {
     {
       points: 1000,
       duration: 120,
-      itemIdx: 1,
-      itemId: 0,
+      itemIdx: 0,
+      itemId: 5,
       amount: 1,
     },
   ];
@@ -123,21 +124,13 @@ async function main() {
     trophy
   );
 
-  console.log(
-    "Space Lasers: BaseLaser deployed to:",
-    slInfo.items[0].itemAddress
-  );
-  console.log(
-    "Space Lasers: RandomLaser deployed to:",
-    slInfo.items[1].itemAddress
-  );
+  console.log("Space Lasers: Items deployed to:", slInfo.items[0].itemAddress);
   console.log("Space Lasers: Trophy deployed to:", slInfo.trophy?.itemAddress);
 
   // Store addresses in file
   const addresses = {
     registry: registry.registryAddress,
-    baseLaser: slInfo.items[0].itemAddress,
-    randomLaser: slInfo.items[1].itemAddress,
+    items: slInfo.items[0].itemAddress,
     trophy: slInfo.trophy?.itemAddress,
   };
   fs.writeFileSync(
