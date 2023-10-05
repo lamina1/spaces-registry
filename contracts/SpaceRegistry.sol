@@ -205,8 +205,9 @@ contract SpaceRegistry is Ownable, Pausable {
         }
 
         // Create space
-        uint256 spaceId = _spaceIds.current();
+        // Skip id 0
         _spaceIds.increment();
+        uint256 spaceId = _spaceIds.current();
         _spaces[spaceId].info = info;
         _spaces[spaceId].owner = msg.sender;
         // Copy achievements
