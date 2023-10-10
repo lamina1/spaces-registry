@@ -22,12 +22,12 @@ contract BaseItem is ERC1155, AccessControl, ISpaceItem {
         return hasRole(DEFAULT_ADMIN_ROLE, account);
     }
 
-    function mint(address account, uint256 id, uint256 amount, bytes memory data)
+    function mint(address account, uint256 id, uint256 amount)
         public
         virtual
         onlyRole(MINTER_ROLE)
     {
-       _mint(account, id, amount, data);
+       _mint(account, id, amount, bytes(''));
     }
 
     // The following functions are overrides required by Solidity.

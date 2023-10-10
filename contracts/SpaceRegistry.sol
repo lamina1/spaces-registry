@@ -230,26 +230,28 @@ contract SpaceRegistry is Ownable, Pausable {
 
     // Mint the achievement of a Space
     // Can be called by minters
-    function mintAchievement(uint256 spaceId, uint256 achievementIdx, address account, bytes memory data) external onlyMinter {
+    function mintAchievement(uint256 spaceId, uint256 achievementIdx, address account) external onlyMinter {
         // Make sure space is active and achievement exists
         require(_spaces[spaceId].info.active, "Space is not active");
         require(achievementIdx < _spaces[spaceId].achievements.length, "Achievement index out of bounds");
-        // Get the achievemnt
-        Achievement memory achievement = _spaces[spaceId].achievements[achievementIdx];
         // Mint the item
-        achievement.item.mint(account, achievement.itemId, achievement.amount, data);
+        _spaces[spaceId].achievements[achievementIdx].item.mint(
+            account,
+            _spaces[spaceId].achievements[achievementIdx].itemId,
+            _spaces[spaceId].achievements[achievementIdx].amount
+        );
         // Emit event
         emit AchievementUnlocked(spaceId, achievementIdx, account);
     }
 
     // Mint the trophy of a Space
     // Can be called by minters
-    function mintTrophy(uint256 spaceId, address account, bytes memory data) external onlyMinter {
+    function mintTrophy(uint256 spaceId, address account) external onlyMinter {
         // Make sure space is active and trophy exists
         require(_spaces[spaceId].info.active, "Space is not active");
         require(address(_spaces[spaceId].trophy) != address(0), "Space has no trophy");
         // Mint the trophy
-        _spaces[spaceId].trophy.mint(account, 0, 1, data);
+        _spaces[spaceId].trophy.mint(account, 0, 1);
         // Emit event
         emit TrophyWon(spaceId, account);
     }

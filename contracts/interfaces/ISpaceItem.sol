@@ -15,5 +15,5 @@ interface ISpaceItem {
      *      If item is unique, id should be computed randomly in the mint function.
      *      The registry will call mint with id set to 0 in this case.
      */
-    function mint(address account, uint256 id, uint256 amount, bytes memory data) external;
+    function mint(address account, uint256 id, uint256 amount) external;
 }
