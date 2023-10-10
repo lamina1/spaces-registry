@@ -40,19 +40,48 @@ const deployTestSpace = async function (
     {
       points: 100,
       duration: 10,
-      itemIdx: 0,
-      itemId: 1,
+      itemIdx: 1,
+      itemId: 0,
+      amount: 1,
+    },
+    {
+      points: 200,
+      duration: 10,
+      itemIdx: 2,
+      itemId: 0,
+      amount: 1,
+    },
+    {
+      points: 300,
+      duration: 10,
+      itemIdx: 3,
+      itemId: 0,
       amount: 1,
     },
   ];
 
   // Test items
   const itemFactory = await ethers.getContractFactory("SpaceLasersItem");
+  const uniqueFactory = await ethers.getContractFactory("UniqueItem");
+  const fungibleFactory = await ethers.getContractFactory("FungibleItem");
+  const baseFactory = await ethers.getContractFactory("BaseItem");
   const trophyFactory = await ethers.getContractFactory("SpaceLasersTrophy");
   const items: [string, BaseItem__factory][] = [
     [
       "ipfs://bafybeiah7lh2r55hkuvzcoaqmvl5dkhzu7tyceqvldjieuy5rarsem7iki/", // IPFS link from old space lasers for testing
       itemFactory,
+    ],
+    [
+      "ipfs://bafybeiah7lh2r55hkuvzcoaqmvl5dkhzu7tyceqvldjieuy5rarsem7iki/", // IPFS link from old space lasers for testing
+      uniqueFactory,
+    ],
+    [
+      "ipfs://bafybeiah7lh2r55hkuvzcoaqmvl5dkhzu7tyceqvldjieuy5rarsem7iki/", // IPFS link from old space lasers for testing
+      fungibleFactory,
+    ],
+    [
+      "ipfs://bafybeiah7lh2r55hkuvzcoaqmvl5dkhzu7tyceqvldjieuy5rarsem7iki/", // IPFS link from old space lasers for testing
+      baseFactory,
     ],
   ];
 
@@ -751,10 +780,23 @@ describe("Space Registry contract", function () {
   // Function: mintAchievement()
   describe("Mint achievement", function () {
     it("Minter can mint an achievement", async function () {
+      // Mint all achievements
       await expect(registry.mintAchievement(1, 0, addr1))
         .to.emit(registry, "AchievementUnlocked")
         .withArgs(1, 0, addr1.address)
         .and.to.emit(spaceDeployInfo.items[0].item, "TransferSingle");
+      await expect(registry.mintAchievement(1, 1, addr1))
+        .to.emit(registry, "AchievementUnlocked")
+        .withArgs(1, 1, addr1.address)
+        .and.to.emit(spaceDeployInfo.items[1].item, "TransferSingle");
+      await expect(registry.mintAchievement(1, 2, addr1))
+        .to.emit(registry, "AchievementUnlocked")
+        .withArgs(1, 2, addr1.address)
+        .and.to.emit(spaceDeployInfo.items[2].item, "TransferSingle");
+      await expect(registry.mintAchievement(1, 3, addr1))
+        .to.emit(registry, "AchievementUnlocked")
+        .withArgs(1, 3, addr1.address)
+        .and.to.emit(spaceDeployInfo.items[3].item, "TransferSingle");
     });
 
     it("Cannot mint an achievement for a non existing space", async function () {
@@ -769,6 +811,92 @@ describe("Space Registry contract", function () {
       await expect(registry.mintAchievement(1, 0, addr1)).to.be.revertedWith(
         "Space is not active"
       );
+    });
+
+    it("Non minter cannot mint an achievement", async function () {
+      await expect(
+        registry.connect(addr1).mintAchievement(1, 0, addr1)
+      ).to.be.revertedWith("SpaceRegistry: caller is not a minter");
+    });
+
+    it("Cannot mint a non existing achievement", async function () {
+      await expect(registry.mintAchievement(1, 4, addr1)).to.be.revertedWith(
+        "Achievement index out of bounds"
+      );
+    });
+  });
+
+  // Function: mintTrophy()
+  describe("Mint trophy", function () {
+    it("Minter can mint a trophy", async function () {
+      await expect(registry.mintTrophy(1, addr1))
+        .to.emit(registry, "TrophyWon")
+        .withArgs(1, addr1.address)
+        .and.to.emit(spaceDeployInfo.trophy?.item, "TransferSingle");
+    });
+
+    it("Cannot mint a trophy for a non existing space", async function () {
+      await expect(registry.mintTrophy(2, addr1)).to.be.revertedWith(
+        "Space is not active"
+      );
+    });
+
+    it("Cannot mint a trophy for an existing inactive space", async function () {
+      // Disable space
+      await registry.setActive(1, false);
+      await expect(registry.mintTrophy(1, addr1)).to.be.revertedWith(
+        "Space is not active"
+      );
+    });
+
+    it("Non minter cannot mint a trophy", async function () {
+      await expect(
+        registry.connect(addr1).mintTrophy(1, addr1)
+      ).to.be.revertedWith("SpaceRegistry: caller is not a minter");
+    });
+
+    it("Cannot mint a trophy if space has not defined one", async function () {
+      // Register a space without trophy
+      // Deploy an item
+      const itemAddress = await deployItem(owner);
+      // Update achievement item addresses
+      testSpaceAchievements[0].item = itemAddress;
+      testSpaceAchievements[1].item = itemAddress;
+      testSpaceAchievements[2].item = itemAddress;
+      // Register space
+      await registry.registerSpace(
+        testSpaceInfo,
+        testSpaceAchievements,
+        ZERO_ADDRESS,
+        { value: price }
+      );
+      await expect(registry.mintTrophy(2, addr1)).to.be.revertedWith(
+        "Space has no trophy"
+      );
+    });
+  });
+
+  // Function: totalSpaces()
+  describe("Total spaces", function () {
+    it("Number of registered spaces is correct", async function () {
+      // 1 space registered at start
+      expect(await registry.totalSpaces()).to.equal(1);
+      // Register a new space
+      // Deploy an item
+      const itemAddress = await deployItem(owner);
+      // Update achievement item addresses
+      testSpaceAchievements[0].item = itemAddress;
+      testSpaceAchievements[1].item = itemAddress;
+      testSpaceAchievements[2].item = itemAddress;
+      // Register space
+      await registry.registerSpace(
+        testSpaceInfo,
+        testSpaceAchievements,
+        ZERO_ADDRESS,
+        { value: price }
+      );
+      // 2 spaces registered
+      expect(await registry.totalSpaces()).to.equal(2);
     });
   });
 });
