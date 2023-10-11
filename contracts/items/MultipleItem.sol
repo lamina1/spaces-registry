@@ -23,9 +23,8 @@ contract MultipleItem is BaseItem, ERC1155URIStorage {
         for (uint256 i = 0; i < amount; i++) {
             uint256 id = _computeId(account, i);
             _mint(account, id, 1, bytes(''));
-            //string memory metadata = string(abi.encodePacked(Strings.toString(laserId), '.json'));
-            // TODO: add .json back when we have metadata on IPFS
-            _setURI(id, Strings.toString(laserId));
+            string memory metadata = string(abi.encodePacked(Strings.toString(laserId), '.json'));
+            _setURI(id, metadata);
         }
         totalItems += amount;
     }
