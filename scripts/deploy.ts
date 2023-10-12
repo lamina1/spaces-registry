@@ -30,9 +30,9 @@ async function main() {
 
   // Info
   const info: SpaceInfoStruct = {
-    name: "Space Lasers",
-    url: "https://spacelasers.lamina1.com",
-    icon: "https://spacelasers.lamina1.com/icon.png",
+    name: "Space Lasers Test",
+    url: "https://spacelasers-test.lamina1.com",
+    icon: "https://spacelasers-test.lamina1.com/icon.png",
     active: true,
   };
 
