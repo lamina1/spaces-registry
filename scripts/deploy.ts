@@ -41,55 +41,55 @@ async function main() {
   const trophyFactory = await ethers.getContractFactory("SpaceLasersTrophy");
   const items: [string, BaseItem__factory][] = [
     [
-      "ipfs://bafybeifepo6wksgleqw54tzvtew67im3yc2db233iskirqmog2xdpwpw3m/",
+      "ipfs://bafybeiaivrzuvhn5bt4owtkcfw7agmhaujod3t24fizs6ujzzai2tuw234/",
       itemFactory,
     ],
   ];
   const trophy: [string, BaseItem__factory] = [
-    "ipfs://bafybeifepo6wksgleqw54tzvtew67im3yc2db233iskirqmog2xdpwpw3m/trophy.json",
+    "ipfs://bafybeiaivrzuvhn5bt4owtkcfw7agmhaujod3t24fizs6ujzzai2tuw234/trophy.json",
     trophyFactory,
   ];
 
   // Achievements
   const achievements: AchievementDef[] = [
-    // Red laser is the starting item
+    // Blue laser is the starting item
     {
       points: 0,
       duration: 0,
       itemIdx: 0,
-      itemId: 0, // Red Laser
+      itemId: 0, // Blue Laser
       amount: 1,
     },
-    // Second item is the green laser
+    // Second item is the yellow laser
     {
       points: 100,
       duration: 30,
       itemIdx: 0,
-      itemId: 1, // Green Laser
+      itemId: 1, // Yellow Laser
       amount: 1,
     },
-    // Third item is the blue laser
+    // Third item is the purple laser
     {
       points: 200,
       duration: 30,
       itemIdx: 0,
-      itemId: 2, // Blue Laser
+      itemId: 2, // Purple Laser
       amount: 1,
     },
-    // Fourth item is the yellow laser
+    // Fourth item is the Red laser
     {
       points: 300,
       duration: 30,
       itemIdx: 0,
-      itemId: 3, // Yellow Laser
+      itemId: 3, // Red Laser
       amount: 1,
     },
-    // Fifth item is the purple laser
+    // Fifth item is the green laser
     {
       points: 400,
       duration: 30,
       itemIdx: 0,
-      itemId: 4, // Purple Laser
+      itemId: 4, // Green Laser
       amount: 1,
     },
     // Last item is the random laser
