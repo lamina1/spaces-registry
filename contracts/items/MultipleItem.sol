@@ -13,6 +13,11 @@ contract MultipleItem is BaseItem, ERC1155URIStorage {
         totalItems = 0;
     }
 
+    // Allow the owner to set the base URI
+    function setBaseURI(string memory newuri) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        _setBaseURI(newuri);
+    }
+
     // Implement ISpaceItem
     function mint(address account, uint256 laserId, uint256 amount)
         public

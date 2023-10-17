@@ -4,9 +4,13 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const BETANET_KEY =
-  process.env.KEY ||
+const REGISTRY_KEY =
+  process.env.REGISTRY_KEY ||
   "0x56289e99c94b6912bfc12adc093c9b51124f0dc54ac7a766b2bc5ccf558d8027";
+
+const LASERS_KEY =
+  process.env.LASERS_KEY ||
+  "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
 
 const config: HardhatUserConfig = {
   solidity: {
@@ -20,7 +24,7 @@ const config: HardhatUserConfig = {
   },
   defaultNetwork: "local",
   networks: {
-    // Coverage and tests
+    // Coverage and testsLASERS_KEY
     hardhat: {
       blockGasLimit: process.env.CODE_COVERAGE ? 10000000000000 : 50000000,
     },
@@ -38,7 +42,7 @@ const config: HardhatUserConfig = {
     // Lamina1 betanet live
     betanet: {
       url: "https://rpc-betanet.lamina1.com/ext/bc/C/rpc",
-      accounts: [BETANET_KEY],
+      accounts: [REGISTRY_KEY, LASERS_KEY],
     },
   },
 };

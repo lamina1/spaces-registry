@@ -31,8 +31,8 @@ async function main() {
   // Info
   const info: SpaceInfoStruct = {
     name: "Space Lasers Test",
-    url: "https://spacelasers-test.lamina1.com",
-    icon: "https://spacelasers-test.lamina1.com/icon.png",
+    url: "https://staging--space-lasers.netlify.app/",
+    icon: "https://staging--space-lasers.netlify.app/icon.png",
     active: true,
   };
 
@@ -41,12 +41,12 @@ async function main() {
   const trophyFactory = await ethers.getContractFactory("SpaceLasersTrophy");
   const items: [string, BaseItem__factory][] = [
     [
-      "ipfs://bafybeiaivrzuvhn5bt4owtkcfw7agmhaujod3t24fizs6ujzzai2tuw234/",
+      "ipfs://bafybeif3jtehmwmrms6mzlzmwncq32et5457cbx3prlmyucwbwk6v4rsam/",
       itemFactory,
     ],
   ];
   const trophy: [string, BaseItem__factory] = [
-    "ipfs://bafybeiaivrzuvhn5bt4owtkcfw7agmhaujod3t24fizs6ujzzai2tuw234/trophy.json",
+    "ipfs://bafybeif3jtehmwmrms6mzlzmwncq32et5457cbx3prlmyucwbwk6v4rsam/trophy.json",
     trophyFactory,
   ];
 
@@ -62,7 +62,7 @@ async function main() {
     },
     // Second item is the yellow laser
     {
-      points: 100,
+      points: 10,
       duration: 30,
       itemIdx: 0,
       itemId: 1, // Yellow Laser
@@ -70,7 +70,7 @@ async function main() {
     },
     // Third item is the purple laser
     {
-      points: 200,
+      points: 20,
       duration: 30,
       itemIdx: 0,
       itemId: 2, // Purple Laser
@@ -78,7 +78,7 @@ async function main() {
     },
     // Fourth item is the Red laser
     {
-      points: 300,
+      points: 30,
       duration: 30,
       itemIdx: 0,
       itemId: 3, // Red Laser
@@ -86,7 +86,7 @@ async function main() {
     },
     // Fifth item is the green laser
     {
-      points: 400,
+      points: 40,
       duration: 30,
       itemIdx: 0,
       itemId: 4, // Green Laser
@@ -94,8 +94,8 @@ async function main() {
     },
     // Last item is the random laser
     {
-      points: 1000,
-      duration: 60,
+      points: 50,
+      duration: 30,
       itemIdx: 0,
       itemId: 5,
       amount: 1,
