@@ -23,7 +23,7 @@ contract Trophy is BaseItem, ERC5633 {
         _mint(account, id, 1, bytes(''));
         // Set as soulbound
         _setSoulbound(id, true);
-         totalItems += 1;
+        totalItems += 1;
     }
 
     // Compute the id of a unique item

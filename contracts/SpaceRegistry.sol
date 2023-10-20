@@ -148,6 +148,13 @@ contract SpaceRegistry is Ownable, Pausable {
         _unpause();
     }
 
+    // Withdraw contract balance
+    function withdraw(address dest) external onlyOwner {
+        uint256 amount = address(this).balance;
+        require(amount > 0, "No balance to withdraw");
+        payable(dest).transfer(amount);
+    }
+
     ///////////////////////////////////
     // Public write functions
 

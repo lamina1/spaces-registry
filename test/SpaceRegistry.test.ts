@@ -306,6 +306,39 @@ describe("Space Registry contract", function () {
     });
   });
 
+  // Function: withdraw()
+  describe("Withdraw", function () {
+    it("Owner can withdraw", async function () {
+      // Withdraw
+      await expect(registry.withdraw(owner.address)).to.not.be.reverted;
+    });
+
+    it("Cannot withdraw if there are no funds", async function () {
+      // Withdraw
+      await expect(registry.withdraw(owner.address)).to.not.be.reverted;
+      // Can't withdraw again
+      await expect(registry.withdraw(owner.address)).to.be.revertedWith(
+        "No balance to withdraw"
+      );
+    });
+
+    it("Withdrawal transfers value correctly", async function () {
+      // Withdraw
+      const beforeDest = await ethers.provider.getBalance(addr1.address);
+      await registry.withdraw(addr1.address);
+      const after = await ethers.provider.getBalance(registry);
+      const afterDest = await ethers.provider.getBalance(addr1.address);
+      expect(after).to.equal(0);
+      expect(afterDest).to.equal(beforeDest + price);
+    });
+
+    it("Non-owner cannot withdraw", async function () {
+      await expect(
+        registry.connect(addr1).withdraw(addr1.address)
+      ).to.be.revertedWith("Ownable: caller is not the owner");
+    });
+  });
+
   // Function: registerSpace()
   describe("Register space", function () {
     it("Can register a new space", async function () {
