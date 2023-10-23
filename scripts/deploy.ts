@@ -63,7 +63,7 @@ async function main() {
     // Second item is the yellow laser
     {
       points: 10,
-      duration: 30,
+      duration: 1,
       itemIdx: 0,
       itemId: 1, // Yellow Laser
       amount: 1,
@@ -71,7 +71,7 @@ async function main() {
     // Third item is the purple laser
     {
       points: 20,
-      duration: 30,
+      duration: 1,
       itemIdx: 0,
       itemId: 2, // Purple Laser
       amount: 1,
@@ -79,7 +79,7 @@ async function main() {
     // Fourth item is the Red laser
     {
       points: 30,
-      duration: 30,
+      duration: 1,
       itemIdx: 0,
       itemId: 3, // Red Laser
       amount: 1,
@@ -87,7 +87,7 @@ async function main() {
     // Fifth item is the green laser
     {
       points: 40,
-      duration: 30,
+      duration: 1,
       itemIdx: 0,
       itemId: 4, // Green Laser
       amount: 1,
@@ -95,7 +95,7 @@ async function main() {
     // Last item is the random laser
     {
       points: 50,
-      duration: 30,
+      duration: 1,
       itemIdx: 0,
       itemId: 5,
       amount: 1,
