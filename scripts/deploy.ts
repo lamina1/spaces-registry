@@ -8,7 +8,7 @@ import * as fs from "fs";
 import { SpaceInfoStruct } from "../typechain-types/contracts/SpaceRegistry";
 import { BaseItem__factory } from "../typechain-types";
 
-const serverAddr = "0x762a73f1383A4c203fB33fD77Bf0992182AD0C57";
+const serverAddr = "0xAf8C2210C618d5f56843f9992eB726Dc39cDE744";
 
 async function main() {
   const signers = await ethers.getSigners();
