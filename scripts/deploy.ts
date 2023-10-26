@@ -31,8 +31,8 @@ async function main() {
   // Info
   const info: SpaceInfoStruct = {
     name: "Space Lasers Test",
-    url: "https://staging--space-lasers.netlify.app/",
-    icon: "https://staging--space-lasers.netlify.app/icon.png",
+    url: "https://spacelasers.io/",
+    icon: "https://spacelasers.io/icon.png",
     active: true,
   };
 
