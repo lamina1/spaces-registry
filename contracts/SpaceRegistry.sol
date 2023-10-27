@@ -32,8 +32,10 @@ struct SpaceInfo {
     string name;
     // The url of the Space
     string url;
-    // The url of the icon for the Space
-    string icon;
+    // The url of metadata for the Space
+    // This will show up in the L1 Hub
+    // Metadata sandard still to be defined
+    string metadata;
     // Is the space active
     bool active;
 }
@@ -83,7 +85,9 @@ contract SpaceRegistry is Ownable, Pausable {
     ///////////////////////////////////
     // Events
     event SpaceRegistered(uint256 indexed id, string name, string url, bool active);
-    event SpaceActive(uint256 indexed id, bool active);
+    event SpaceOwnerChanged(uint256 indexed id, address indexed owner);
+    event SpaceActiveChanged(uint256 indexed id, bool active);
+    event SpaceMetadataChanged(uint256 indexed id, string metadata);
     event AchievementUnlocked(uint256 indexed spaceId, uint256 indexed achievementIdx, address indexed account);
     event TrophyWon(uint256 indexed spaceId, address indexed account);
 
@@ -227,13 +231,35 @@ contract SpaceRegistry is Ownable, Pausable {
         emit SpaceRegistered(spaceId, info.name, info.url, info.active);
     }
 
+    ///////////////////////////////////
+    // Space owner write functions
+
+    // Set the owner of a space
+    // Can be called by the space owner or the contract owner
+    function setOwner(uint256 spaceId, address newOwner) external {
+        _checkOwnerOrSpaceOwner(spaceId);
+        _spaces[spaceId].owner = newOwner;
+        emit SpaceOwnerChanged(spaceId, newOwner);
+    }
+
     // Enable/disable a space
     // Can be called by the space owner or the contract owner
     function setActive(uint256 spaceId, bool active) external {
         _checkOwnerOrSpaceOwner(spaceId);
         _spaces[spaceId].info.active = active;
-        emit SpaceActive(spaceId, active);
+        emit SpaceActiveChanged(spaceId, active);
     }
+
+    // Set the metadata url of a space
+    // Can be called by the space owner or the contract owner
+    function setMetadata(uint256 spaceId, string calldata metadata) external {
+        _checkOwnerOrSpaceOwner(spaceId);
+        _spaces[spaceId].info.metadata = metadata;
+        emit SpaceMetadataChanged(spaceId, metadata);
+    }
+
+    ///////////////////////////////////
+    // Minter write functions
 
     // Mint the achievement of a Space
     // Can be called by minters
@@ -267,6 +293,10 @@ contract SpaceRegistry is Ownable, Pausable {
     // Public Read functions
     function totalSpaces() public view returns (uint256) {
         return _spaceIds.current();
+    }
+
+    function getSpaceOwner(uint256 spaceId) public view returns (address) {
+        return _spaces[spaceId].owner;
     }
 
     function getSpaceInfo(uint256 spaceId) public view returns (SpaceInfo memory) {

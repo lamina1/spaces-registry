@@ -24,7 +24,7 @@ const deployTestSpace = async function (
   const info = {
     name: "Test Space",
     url: "https://test.space",
-    icon: "https://test.space/icon.png",
+    metadata: "https://test.space/metadata.json",
     active: true,
   };
 
@@ -106,7 +106,7 @@ const deployTestSpace = async function (
 const testSpaceInfo: SpaceInfoStruct = {
   name: "Test Space 2",
   url: "https://test.space2",
-  icon: "https://test.space2/icon.png",
+  metadata: "https://test.space2/metadata.json",
   active: true,
 };
 
@@ -138,28 +138,28 @@ const testSpaceAchievements: AchievementStruct[] = [
 const testSpaceInfoShortName: SpaceInfoStruct = {
   name: "",
   url: "https://test.space2",
-  icon: "https://test.space2/icon.png",
+  metadata: "https://test.space2/metadata.json",
   active: true,
 };
 
 const testSpaceInfoLongName: SpaceInfoStruct = {
   name: "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuv",
   url: "https://test.space2",
-  icon: "https://test.space2/icon.png",
+  metadata: "https://test.space2/metadata.json",
   active: true,
 };
 
 const testSpaceInfoShortUrl: SpaceInfoStruct = {
   name: "Test Space 2",
   url: "",
-  icon: "https://test.space2/icon.png",
+  metadata: "https://test.space2/metadata.json",
   active: true,
 };
 
 const testSpaceInfoLongUrl: SpaceInfoStruct = {
   name: "Test Space 2",
   url: "https://test.space2.abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzab",
-  icon: "https://test.space2/icon.png",
+  metadata: "https://test.space2/metadata.json",
   active: true,
 };
 
@@ -362,7 +362,7 @@ describe("Space Registry contract", function () {
       const info = await registry.getSpaceInfo(2);
       expect(info.name).to.equal(testSpaceInfo.name);
       expect(info.url).to.equal(testSpaceInfo.url);
-      expect(info.icon).to.equal(testSpaceInfo.icon);
+      expect(info.metadata).to.equal(testSpaceInfo.metadata);
       expect(info.active).to.equal(testSpaceInfo.active);
       // Check achievements
       expect(await registry.getNumAchievements(2)).to.equal(3);
@@ -398,7 +398,7 @@ describe("Space Registry contract", function () {
       const info = await registry.getSpaceInfo(2);
       expect(info.name).to.equal(testSpaceInfo.name);
       expect(info.url).to.equal(testSpaceInfo.url);
-      expect(info.icon).to.equal(testSpaceInfo.icon);
+      expect(info.metadata).to.equal(testSpaceInfo.metadata);
       expect(info.active).to.equal(testSpaceInfo.active);
       // Check achievements
       expect(await registry.getNumAchievements(2)).to.equal(3);
@@ -674,6 +674,151 @@ describe("Space Registry contract", function () {
     });
   });
 
+  // Function: setOwner()
+  describe("Set owner", function () {
+    it("Owner of contract can set owner of space", async function () {
+      // Deploy space from addr1
+      // Deploy an item
+      const itemAddress = await deployItem(addr1);
+      // Deploy a trophy
+      const trophyAddress = await deployTrophy(addr1);
+      // Update achievement item addresses
+      testSpaceAchievements[0].item = itemAddress;
+      testSpaceAchievements[1].item = itemAddress;
+      testSpaceAchievements[2].item = itemAddress;
+      // Register space
+      await registry
+        .connect(addr1)
+        .registerSpace(testSpaceInfo, testSpaceAchievements, trophyAddress, {
+          value: price,
+        });
+      // Confirm space owner
+      const curr = await registry.getSpaceOwner(2);
+      expect(curr).to.equal(addr1.address);
+      // Change owner
+      await registry.setOwner(2, owner.address);
+      // Confirm new onwer
+      const curr2 = await registry.getSpaceOwner(2);
+      expect(curr2).to.equal(owner.address);
+    });
+
+    it("Owner of contract can custody a space", async function () {
+      // Deploy space from addr1
+      // Deploy an item
+      const itemAddress = await deployItem(addr1);
+      // Deploy a trophy
+      const trophyAddress = await deployTrophy(addr1);
+      // Update achievement item addresses
+      testSpaceAchievements[0].item = itemAddress;
+      testSpaceAchievements[1].item = itemAddress;
+      testSpaceAchievements[2].item = itemAddress;
+      // Register space
+      await registry
+        .connect(addr1)
+        .registerSpace(testSpaceInfo, testSpaceAchievements, trophyAddress, {
+          value: price,
+        });
+      // Confirm space owner
+      const curr = await registry.getSpaceOwner(2);
+      expect(curr).to.equal(addr1.address);
+      // Change owner
+      await registry.setOwner(2, owner.address);
+      // Confirm new onwer
+      const curr2 = await registry.getSpaceOwner(2);
+      expect(curr2).to.equal(owner.address);
+      // Old owner can't change anything else in space
+      await expect(
+        registry.connect(addr1).setOwner(2, addr1.address)
+      ).to.be.revertedWith(
+        "SpaceRegistry: caller is not Space owner or contract Owner"
+      );
+      await expect(
+        registry.connect(addr1).setActive(2, false)
+      ).to.be.revertedWith(
+        "SpaceRegistry: caller is not Space owner or contract Owner"
+      );
+      await expect(
+        registry.connect(addr1).setMetadata(2, "new metadata")
+      ).to.be.revertedWith(
+        "SpaceRegistry: caller is not Space owner or contract Owner"
+      );
+    });
+
+    it("Owner of space can set owner of its own space", async function () {
+      // Deploy space from addr1
+      // Deploy an item
+      const itemAddress = await deployItem(addr1);
+      // Deploy a trophy
+      const trophyAddress = await deployTrophy(addr1);
+      // Update achievement item addresses
+      testSpaceAchievements[0].item = itemAddress;
+      testSpaceAchievements[1].item = itemAddress;
+      testSpaceAchievements[2].item = itemAddress;
+      // Register space
+      await registry
+        .connect(addr1)
+        .registerSpace(testSpaceInfo, testSpaceAchievements, trophyAddress, {
+          value: price,
+        });
+      // Confirm space owner
+      const curr = await registry.getSpaceOwner(2);
+      expect(curr).to.equal(addr1.address);
+      // Change owner
+      await registry.connect(addr1).setOwner(2, owner.address);
+      // Confirm new onwer
+      const curr2 = await registry.getSpaceOwner(2);
+      expect(curr2).to.equal(owner.address);
+    });
+
+    it("Owner of space cannot set owner on another space", async function () {
+      // Deploy space
+      // Deploy an item
+      const itemAddress = await deployItem(owner);
+      // Deploy a trophy
+      const trophyAddress = await deployTrophy(owner);
+      // Update achievement item addresses
+      testSpaceAchievements[0].item = itemAddress;
+      testSpaceAchievements[1].item = itemAddress;
+      testSpaceAchievements[2].item = itemAddress;
+      // Register space
+      await registry.registerSpace(
+        testSpaceInfo,
+        testSpaceAchievements,
+        trophyAddress,
+        {
+          value: price,
+        }
+      );
+      // Deploy space from addr1
+      // Deploy an item
+      const itemAddress2 = await deployItem(addr1);
+      // Deploy a trophy
+      const trophyAddress2 = await deployTrophy(addr1);
+      // Update achievement item addresses
+      testSpaceAchievements[0].item = itemAddress2;
+      testSpaceAchievements[1].item = itemAddress2;
+      testSpaceAchievements[2].item = itemAddress2;
+      // Register space
+      await registry
+        .connect(addr1)
+        .registerSpace(testSpaceInfo, testSpaceAchievements, trophyAddress2, {
+          value: price,
+        });
+      // Confirm space owners
+      const curr = await registry.getSpaceOwner(2);
+      expect(curr).to.equal(owner.address);
+      // Confirm space owners
+      const curr2 = await registry.getSpaceOwner(3);
+      expect(curr2).to.equal(addr1.address);
+      // Addr1 cannot change owner of space 2
+      await expect(
+        registry.connect(addr1).setOwner(2, addr1.address)
+      ).to.be.revertedWith(
+        "SpaceRegistry: caller is not Space owner or contract Owner"
+      );
+    });
+  });
+
   // Function: setActive()
   describe("Set active", function () {
     it("Owner of contract can disable space", async function () {
@@ -804,6 +949,109 @@ describe("Space Registry contract", function () {
       // Addr1 cannot disable space 2
       await expect(
         registry.connect(addr1).setActive(2, false)
+      ).to.be.revertedWith(
+        "SpaceRegistry: caller is not Space owner or contract Owner"
+      );
+    });
+  });
+
+  // Function: setMetadata()
+  describe("Set metadata", function () {
+    it("Owner of contract can set metadata", async function () {
+      // Deploy space from addr1
+      // Deploy an item
+      const itemAddress = await deployItem(addr1);
+      // Deploy a trophy
+      const trophyAddress = await deployTrophy(addr1);
+      // Update achievement item addresses
+      testSpaceAchievements[0].item = itemAddress;
+      testSpaceAchievements[1].item = itemAddress;
+      testSpaceAchievements[2].item = itemAddress;
+      // Register space
+      await registry
+        .connect(addr1)
+        .registerSpace(testSpaceInfo, testSpaceAchievements, trophyAddress, {
+          value: price,
+        });
+      // Confirm space metadata
+      const info = await registry.getSpaceInfo(2);
+      expect(info.metadata).to.equal(testSpaceInfo.metadata);
+      // Set metadata
+      await registry.setMetadata(2, "TEST");
+      // Confirm new metadata
+      const info2 = await registry.getSpaceInfo(2);
+      expect(info2.metadata).to.equal("TEST");
+    });
+
+    it("Owner of space can set metadata of it's own space", async function () {
+      // Deploy space from addr1
+      // Deploy an item
+      const itemAddress = await deployItem(addr1);
+      // Deploy a trophy
+      const trophyAddress = await deployTrophy(addr1);
+      // Update achievement item addresses
+      testSpaceAchievements[0].item = itemAddress;
+      testSpaceAchievements[1].item = itemAddress;
+      testSpaceAchievements[2].item = itemAddress;
+      // Register space
+      await registry
+        .connect(addr1)
+        .registerSpace(testSpaceInfo, testSpaceAchievements, trophyAddress, {
+          value: price,
+        });
+      // Confirm space metadata
+      const info = await registry.getSpaceInfo(2);
+      expect(info.metadata).to.equal(testSpaceInfo.metadata);
+      // Set metadata
+      await registry.connect(addr1).setMetadata(2, "TEST");
+      // Confirm new metadata
+      const info2 = await registry.getSpaceInfo(2);
+      expect(info2.metadata).to.equal("TEST");
+    });
+
+    it("Owner of space cannot set metadata of another space", async function () {
+      // Deploy space
+      // Deploy an item
+      const itemAddress = await deployItem(owner);
+      // Deploy a trophy
+      const trophyAddress = await deployTrophy(owner);
+      // Update achievement item addresses
+      testSpaceAchievements[0].item = itemAddress;
+      testSpaceAchievements[1].item = itemAddress;
+      testSpaceAchievements[2].item = itemAddress;
+      // Register space
+      await registry.registerSpace(
+        testSpaceInfo,
+        testSpaceAchievements,
+        trophyAddress,
+        {
+          value: price,
+        }
+      );
+      // Deploy space from addr1
+      // Deploy an item
+      const itemAddress2 = await deployItem(addr1);
+      // Deploy a trophy
+      const trophyAddress2 = await deployTrophy(addr1);
+      // Update achievement item addresses
+      testSpaceAchievements[0].item = itemAddress2;
+      testSpaceAchievements[1].item = itemAddress2;
+      testSpaceAchievements[2].item = itemAddress2;
+      // Register space
+      await registry
+        .connect(addr1)
+        .registerSpace(testSpaceInfo, testSpaceAchievements, trophyAddress2, {
+          value: price,
+        });
+      // Confirm space metadata
+      const info = await registry.getSpaceInfo(2);
+      expect(info.metadata).to.equal(testSpaceInfo.metadata);
+      // Confirm space metadata
+      const info2 = await registry.getSpaceInfo(2);
+      expect(info2.metadata).to.equal(testSpaceInfo.metadata);
+      // Addr1 cannot set metadata of space 2
+      await expect(
+        registry.connect(addr1).setMetadata(2, "TEST")
       ).to.be.revertedWith(
         "SpaceRegistry: caller is not Space owner or contract Owner"
       );

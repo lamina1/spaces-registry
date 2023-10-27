@@ -123,7 +123,7 @@ export async function deploySpace(
   const info: SpaceInfoStruct = {
     name: spaceInfo.name,
     url: spaceInfo.url,
-    icon: spaceInfo.icon,
+    metadata: spaceInfo.metadata,
     active: spaceInfo.active,
   };
 
