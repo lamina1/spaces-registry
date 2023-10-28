@@ -18,6 +18,9 @@ coverage.json
 # Env
 .env
 
+# Local network DB
+local/db*
+
 # Logs
 logs
 *.log

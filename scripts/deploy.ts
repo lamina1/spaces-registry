@@ -32,7 +32,7 @@ async function main() {
   const info: SpaceInfoStruct = {
     name: "Space Lasers Test",
     url: "https://spacelasers.io/",
-    metadata: "ipfs://..../metadata.json",
+    metadata: "ipfs://..../metadata.json", // Not in use yet
     active: true,
   };
 

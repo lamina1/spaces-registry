@@ -19,7 +19,7 @@ contract MultipleItem is BaseItem, ERC1155URIStorage {
     }
 
     // Implement ISpaceItem
-    function mint(address account, uint256 laserId, uint256 amount)
+    function mint(address account, uint256 idx, uint256 amount)
         public
         override(BaseItem)
         onlyRole(MINTER_ROLE)
@@ -28,7 +28,7 @@ contract MultipleItem is BaseItem, ERC1155URIStorage {
         for (uint256 i = 0; i < amount; i++) {
             uint256 id = _computeId(account, i);
             _mint(account, id, 1, bytes(''));
-            string memory metadata = string(abi.encodePacked(Strings.toString(laserId), '.json'));
+            string memory metadata = string(abi.encodePacked(Strings.toString(idx), '.json'));
             _setURI(id, metadata);
         }
         totalItems += amount;

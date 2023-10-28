@@ -2,20 +2,23 @@
 
 set -e
 
-# Check if lamina1-cli is available
-if [ ! -d ../lamina1-cli ]; then
-    echo "lamina1-cli repo not found. Please clone lamina1-cli into the parent directory"
-    exit 1
-fi
-
-# Build lamina1-cli
 # Start local network
 echo "Starting local network"
-(
-    cd ../lamina1-cli
-    ./scripts/build.sh
-    ./bin/lamina1-cli network start > /dev/null 2>&1
-)
+cd local
+rm -rf db
+for ((i = 1; i <= 5; i++)); do
+    ./bin/lamina1-node \
+      --network-id "local" \
+      --data-dir ./db/node${i} \
+      --http-port $((9650 + (i-1)*10)) \
+      --staking-port $((9671 + (i-1)*10)) \
+      --staking-tls-key-file ./staking/staker${i}.key \
+      --staking-tls-cert-file ./staking/staker${i}.crt \
+      --staking-signer-key-file ./staking/signer${i}.key > /dev/null 2>&1 &
+done
+cd ../
+
+sleep 20
 
 # Fund C chain accounts
 npm run fund

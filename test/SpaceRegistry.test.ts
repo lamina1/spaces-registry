@@ -1,7 +1,12 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 import { HardhatEthersSigner } from "@nomicfoundation/hardhat-ethers/signers";
-import { SpaceRegistry, BaseItem__factory } from "../typechain-types";
+import {
+  SpaceRegistry,
+  BaseItem__factory,
+  BaseItem,
+  MultipleItem,
+} from "../typechain-types";
 import {
   deploySpacesRegistry,
   deploySpace,
@@ -63,26 +68,14 @@ const deployTestSpace = async function (
   // Test items
   const itemFactory = await ethers.getContractFactory("SpaceLasersItem");
   const uniqueFactory = await ethers.getContractFactory("UniqueItem");
-  const fungibleFactory = await ethers.getContractFactory("FungibleItem");
+  const multipleFactory = await ethers.getContractFactory("MultipleItem");
   const baseFactory = await ethers.getContractFactory("BaseItem");
   const trophyFactory = await ethers.getContractFactory("SpaceLasersTrophy");
   const items: [string, BaseItem__factory][] = [
-    [
-      "ipfs://bafybeiah7lh2r55hkuvzcoaqmvl5dkhzu7tyceqvldjieuy5rarsem7iki/", // IPFS link from old space lasers for testing
-      itemFactory,
-    ],
-    [
-      "ipfs://bafybeiah7lh2r55hkuvzcoaqmvl5dkhzu7tyceqvldjieuy5rarsem7iki/", // IPFS link from old space lasers for testing
-      uniqueFactory,
-    ],
-    [
-      "ipfs://bafybeiah7lh2r55hkuvzcoaqmvl5dkhzu7tyceqvldjieuy5rarsem7iki/", // IPFS link from old space lasers for testing
-      fungibleFactory,
-    ],
-    [
-      "ipfs://bafybeiah7lh2r55hkuvzcoaqmvl5dkhzu7tyceqvldjieuy5rarsem7iki/", // IPFS link from old space lasers for testing
-      baseFactory,
-    ],
+    ["ipfs://1221312312/", itemFactory],
+    ["ipfs://213253525/", uniqueFactory],
+    ["ipfs://547547574/", multipleFactory],
+    ["ipfs://647465747574/", baseFactory],
   ];
 
   // Test trophy
@@ -175,6 +168,28 @@ const deployItem = async function (
   return itemAddress;
 };
 
+const deployBaseItem = async function (
+  deployer: HardhatEthersSigner
+): Promise<BaseItem> {
+  const itemFactory = await ethers.getContractFactory("BaseItem");
+  const item = await itemFactory
+    .connect(deployer)
+    .deploy("ipfs://...../metadata.json");
+  await item.waitForDeployment();
+  return item;
+};
+
+const deployMultipleItem = async function (
+  deployer: HardhatEthersSigner
+): Promise<MultipleItem> {
+  const itemFactory = await ethers.getContractFactory("MultipleItem");
+  const item = await itemFactory
+    .connect(deployer)
+    .deploy("ipfs://...../metadata.json");
+  await item.waitForDeployment();
+  return item;
+};
+
 const deployTrophy = async function (
   deployer: HardhatEthersSigner
 ): Promise<string> {
@@ -204,12 +219,13 @@ describe("Space Registry contract", function () {
   let registryAddr: string;
   let owner: HardhatEthersSigner;
   let addr1: HardhatEthersSigner;
+  let addr2: HardhatEthersSigner;
   let spaceDeployInfo: SpaceDeployInfo;
   const price = ethers.parseEther("10");
 
   // Deploy contracts before each test
   beforeEach(async function () {
-    [owner, addr1] = await ethers.getSigners();
+    [owner, addr1, addr2] = await ethers.getSigners();
     const spaceReg = await deploySpacesRegistry(owner, owner.address, "10");
     registry = spaceReg.registry;
     registryAddr = spaceReg.registryAddress;
@@ -285,6 +301,28 @@ describe("Space Registry contract", function () {
       await expect(registry.connect(addr1).pause()).to.be.revertedWith(
         "Ownable: caller is not the owner"
       );
+    });
+
+    it("Cannot register new spaces when paused", async function () {
+      await registry.pause();
+      expect(await registry.paused()).to.equal(true);
+      // Deploy an item
+      const itemAddress = await deployItem(owner);
+      // Deploy a trophy
+      const trophyAddress = await deployTrophy(owner);
+      // Update achievement item addresses
+      testSpaceAchievements[0].item = itemAddress;
+      testSpaceAchievements[1].item = itemAddress;
+      testSpaceAchievements[2].item = itemAddress;
+      // Register space fails
+      await expect(
+        registry.registerSpace(
+          testSpaceInfo,
+          testSpaceAchievements,
+          trophyAddress,
+          { value: price }
+        )
+      ).to.be.revertedWith("Pausable: paused");
     });
   });
 
@@ -1080,6 +1118,46 @@ describe("Space Registry contract", function () {
         .and.to.emit(spaceDeployInfo.items[3].item, "TransferSingle");
     });
 
+    it("Cannot mint items directly", async function () {
+      let item = await ethers.getContractAt(
+        "BaseItem",
+        spaceDeployInfo.items[0].item
+      );
+      const minter = await item.MINTER_ROLE();
+      await expect(
+        item.connect(addr2).mint(addr1.address, 0, 1)
+      ).to.be.revertedWith(
+        `AccessControl: account ${addr2.address.toLowerCase()} is missing role ${minter}`
+      );
+      item = await ethers.getContractAt(
+        "BaseItem",
+        spaceDeployInfo.items[1].item
+      );
+      await expect(
+        item.connect(addr2).mint(addr1.address, 0, 1)
+      ).to.be.revertedWith(
+        `AccessControl: account ${addr2.address.toLowerCase()} is missing role ${minter}`
+      );
+      item = await ethers.getContractAt(
+        "BaseItem",
+        spaceDeployInfo.items[2].item
+      );
+      await expect(
+        item.connect(addr2).mint(addr1.address, 0, 1)
+      ).to.be.revertedWith(
+        `AccessControl: account ${addr2.address.toLowerCase()} is missing role ${minter}`
+      );
+      item = await ethers.getContractAt(
+        "BaseItem",
+        spaceDeployInfo.items[3].item
+      );
+      await expect(
+        item.connect(addr2).mint(addr1.address, 0, 1)
+      ).to.be.revertedWith(
+        `AccessControl: account ${addr2.address.toLowerCase()} is missing role ${minter}`
+      );
+    });
+
     it("Cannot mint an achievement for a non existing space", async function () {
       await expect(registry.mintAchievement(2, 0, addr1)).to.be.revertedWith(
         "Space is not active"
@@ -1114,6 +1192,41 @@ describe("Space Registry contract", function () {
         .to.emit(registry, "TrophyWon")
         .withArgs(1, addr1.address)
         .and.to.emit(spaceDeployInfo.trophy?.item, "TransferSingle");
+    });
+
+    it("Trophy is soulbound", async function () {
+      // Mint trophy
+      const tx = await registry.mintTrophy(1, addr1);
+      const result = await tx.wait();
+      // Test trophy is soulbound
+      const trophy = await ethers.getContractAt(
+        "BaseItem",
+        spaceDeployInfo.trophy?.item || ""
+      );
+      await expect(
+        trophy
+          .connect(addr1)
+          .safeTransferFrom(
+            addr1.address,
+            owner.address,
+            result?.logs[0].data.slice(0, 66) || "0",
+            1,
+            "0x"
+          )
+      ).to.be.revertedWith("ERC5633: Soulbound, Non-Transferable");
+    });
+
+    it("Cannot mint a trophy directly", async function () {
+      const item = await ethers.getContractAt(
+        "BaseItem",
+        spaceDeployInfo.trophy?.item || ""
+      );
+      const minter = await item.MINTER_ROLE();
+      await expect(
+        item.connect(addr2).mint(addr1.address, 0, 1)
+      ).to.be.revertedWith(
+        `AccessControl: account ${addr2.address.toLowerCase()} is missing role ${minter}`
+      );
     });
 
     it("Cannot mint a trophy for a non existing space", async function () {
@@ -1178,6 +1291,37 @@ describe("Space Registry contract", function () {
       );
       // 2 spaces registered
       expect(await registry.totalSpaces()).to.equal(2);
+    });
+  });
+
+  // Items URI setters
+  describe("Set URI", function () {
+    it("Owner of item can set URI", async function () {
+      // Deploy an item
+      const item = await deployBaseItem(owner);
+      // Set URI
+      await item.setURI("TEST");
+      expect(await item.uri(0)).to.equal("TEST");
+      // Deploy an item
+      const item2 = await deployMultipleItem(owner);
+      // Set base URI
+      expect(await item2.setBaseURI("TEST")).to.not.be.reverted;
+    });
+
+    it("Non-owner cannot set URI", async function () {
+      // Deploy an item
+      const item = await deployBaseItem(owner);
+      // Try to set URI
+      const admin = await item.DEFAULT_ADMIN_ROLE();
+      await expect(item.connect(addr1).setURI("TEST")).to.be.revertedWith(
+        `AccessControl: account ${addr1.address.toLowerCase()} is missing role ${admin}`
+      );
+      // Deploy an item
+      const item2 = await deployMultipleItem(owner);
+      // Try to set base URI
+      await expect(item2.connect(addr1).setBaseURI("TEST")).to.be.revertedWith(
+        `AccessControl: account ${addr1.address.toLowerCase()} is missing role ${admin}`
+      );
     });
   });
 });
