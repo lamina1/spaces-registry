@@ -48,13 +48,13 @@ npm run stop
 
 The Spaces Registry is deployed at the following address in the C chain
 ```
-Spaces Registry: 0x7cb0C2159d599Cbe2466CfaB05621657212a0582
+Spaces Registry: 0xc79c66969fff7d09bf9DB40E549DA2b3858f7ADf
 ```
 
 The items for Space Lasers are deployed at the following addresses in the C chain
 ```
-Space Lasers Items: 0x7B1aC61D1922c3C33B2DE21E66f13430Bd6F8A1e
-Space Lasers Trophy: 0xBbB2016A3cCd10bCB4d670a5FF2D53d261161a33
+Space Lasers Items: 0x673a0e68062035c66F8c6D8BC719B9615150dF4b
+Space Lasers Trophy: 0x05959221Fd2A8d048cdB49a2500379502213534C
 ```
 
 ## Deploying to LAMINA1 Betanet

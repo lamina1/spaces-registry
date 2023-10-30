@@ -51,7 +51,7 @@ async function main() {
   ];
 
   // Load registry
-  const registryAddress = "0x7cb0C2159d599Cbe2466CfaB05621657212a0582";
+  const registryAddress = "0xc79c66969fff7d09bf9DB40E549DA2b3858f7ADf";
   const registry = await ethers.getContractAt("SpaceRegistry", registryAddress);
 
   ///////////////////////////////////

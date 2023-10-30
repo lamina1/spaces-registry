@@ -22,7 +22,7 @@ export interface SpaceRegistryDeployInfo {
   registryAddress: string;
 }
 
-const DEFAULT_PRICE = "10";
+const DEFAULT_PRICE = "1";
 
 export async function deploySpacesRegistry(
   deployer: HardhatEthersSigner,

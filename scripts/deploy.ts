@@ -41,12 +41,12 @@ async function main() {
   const trophyFactory = await ethers.getContractFactory("SpaceLasersTrophy");
   const items: [string, BaseItem__factory][] = [
     [
-      "ipfs://bafybeifnr7ibo27ux2ibdpeawvdrr3wnggjqqn2jstc4rjfrqrsvqlgb5q/",
+      "ipfs://bafybeidagvw2ykizo3uk5nhpzhh6xfw2guu4c453luie44h2pc7jqlgsoi/",
       itemFactory,
     ],
   ];
   const trophy: [string, BaseItem__factory] = [
-    "ipfs://bafybeifnr7ibo27ux2ibdpeawvdrr3wnggjqqn2jstc4rjfrqrsvqlgb5q/trophy.json",
+    "ipfs://bafybeidagvw2ykizo3uk5nhpzhh6xfw2guu4c453luie44h2pc7jqlgsoi/trophy.json",
     trophyFactory,
   ];
 
