@@ -11,4 +11,9 @@ interface ISettableUri is ISpaceItem {
      * @dev Set the URI for an item
      */
     function setItemURI(uint256 id, string memory uri) external;
+
+    /**
+     * @dev Get the URI for an item
+     */
+    function uri(uint256 id) external view returns (string memory);
 }

@@ -40,7 +40,7 @@ contract BaseItemUri is ERC1155, AccessControl, ERC1155URIStorage, ISettableUri 
     // The following functions are overrides required by Solidity.
 
     function uri(uint256 id)
-        override(ERC1155, ERC1155URIStorage)
+        override(ERC1155, ERC1155URIStorage, ISettableUri)
         public view virtual returns (string memory) {
         return super.uri(id);
     }
