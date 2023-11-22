@@ -140,10 +140,14 @@ async function main() {
     slInfo.items[1].itemAddress
   );
   const role = await item.URI_SETTER_ROLE();
-  const tx = await item.connect(deployer).grantRole(role, serverAddr);
+  const tx = await item.connect(owner).grantRole(role, serverAddr);
   await tx.wait(1);
 
   console.log("Space Lasers: Items deployed to:", slInfo.items[0].itemAddress);
+  console.log(
+    "Space Lasers: Unique Trophy deployed to:",
+    slInfo.items[1].itemAddress
+  );
   console.log("Space Lasers: Trophy deployed to:", slInfo.trophy?.itemAddress);
 
   // Store addresses in file
