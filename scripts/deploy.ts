@@ -134,6 +134,15 @@ async function main() {
     trophy
   );
 
+  // Setup server as URI setter in unique trophy
+  const item = await ethers.getContractAt(
+    "UniqueTrophy",
+    slInfo.items[1].itemAddress
+  );
+  const role = await item.URI_SETTER_ROLE();
+  const tx = await item.connect(deployer).grantRole(role, serverAddr);
+  await tx.wait(1);
+
   console.log("Space Lasers: Items deployed to:", slInfo.items[0].itemAddress);
   console.log("Space Lasers: Trophy deployed to:", slInfo.trophy?.itemAddress);
 

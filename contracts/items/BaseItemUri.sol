@@ -8,10 +8,12 @@ import "../interfaces/ISettableUri.sol";
 
 contract BaseItemUri is ERC1155, AccessControl, ERC1155URIStorage, ISettableUri {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
+    bytes32 public constant URI_SETTER_ROLE = keccak256("URI_SETTER_ROLE");
 
     constructor(string memory _uri) ERC1155(_uri) {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(MINTER_ROLE, msg.sender);
+        _grantRole(URI_SETTER_ROLE, msg.sender);
         _setBaseURI(_uri);
     }
 
@@ -33,7 +35,7 @@ contract BaseItemUri is ERC1155, AccessControl, ERC1155URIStorage, ISettableUri 
        _mint(account, id, amount, bytes(''));
     }
 
-    function setItemURI(uint256 id, string memory _uri) external onlyRole(MINTER_ROLE) {
+    function setItemURI(uint256 id, string memory _uri) external onlyRole(URI_SETTER_ROLE) {
         _setURI(id, _uri);
     }
 
