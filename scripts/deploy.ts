@@ -6,7 +6,7 @@ import {
 } from "./utils/deploy";
 import * as fs from "fs";
 import { SpaceInfoStruct } from "../typechain-types/contracts/SpaceRegistry";
-import { BaseItem__factory } from "../typechain-types";
+import { BaseItem__factory, BaseItemUri__factory } from "../typechain-types";
 
 const serverAddr = "0xAf8C2210C618d5f56843f9992eB726Dc39cDE744";
 
@@ -39,11 +39,13 @@ async function main() {
   // Items
   const itemFactory = await ethers.getContractFactory("SpaceLasersItem");
   const trophyFactory = await ethers.getContractFactory("SpaceLasersTrophy");
-  const items: [string, BaseItem__factory][] = [
+  const uniqueFactory = await ethers.getContractFactory("UniqueTrophy");
+  const items: [string, BaseItem__factory | BaseItemUri__factory][] = [
     [
       "ipfs://bafybeidagvw2ykizo3uk5nhpzhh6xfw2guu4c453luie44h2pc7jqlgsoi/",
       itemFactory,
     ],
+    ["ipfs://", uniqueFactory],
   ];
   const trophy: [string, BaseItem__factory] = [
     "ipfs://bafybeidagvw2ykizo3uk5nhpzhh6xfw2guu4c453luie44h2pc7jqlgsoi/trophy.json",
@@ -98,6 +100,14 @@ async function main() {
       duration: 1,
       itemIdx: 0,
       itemId: 5,
+      amount: 1,
+    },
+    // Unique trophy
+    {
+      points: 100,
+      duration: 0,
+      itemIdx: 1,
+      itemId: 0,
       amount: 1,
     },
   ];

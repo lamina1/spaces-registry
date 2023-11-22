@@ -3,8 +3,10 @@ import { HardhatEthersSigner } from "@nomicfoundation/hardhat-ethers/signers";
 import {
   SpaceRegistry,
   BaseItem__factory,
+  BaseItemUri__factory,
   ISpaceItem,
   BaseItem,
+  BaseItemUri,
 } from "../../typechain-types";
 import { ContractTransactionResponse } from "ethers";
 import {
@@ -87,11 +89,11 @@ export async function deploySpace(
   // Space Info
   spaceInfo: SpaceInfoStruct,
   // Items to deploy
-  items: [string, BaseItem__factory][],
+  items: [string, BaseItem__factory | BaseItemUri__factory][],
   // Achievements definition
   achievements: AchievementDef[],
   // Trophy (optional)
-  trophy?: [string, BaseItem__factory]
+  trophy?: [string, BaseItem__factory | BaseItemUri__factory]
 ): Promise<SpaceDeployInfo> {
   // 1. Deploy all items
   const itemsList: ItemDeployInfo[] = [];
@@ -174,7 +176,7 @@ export async function deployItem(
   deployer: HardhatEthersSigner,
   uri: string,
   registryAddress: string,
-  itemFactory: BaseItem__factory
+  itemFactory: BaseItem__factory | BaseItemUri__factory
 ): Promise<ItemDeployInfo> {
   // 1. Deploy Item
   const item = await itemFactory.connect(deployer).deploy(uri);
@@ -192,7 +194,7 @@ export async function deployItem(
 
 async function setupMinterItem(
   deployer: HardhatEthersSigner,
-  item: BaseItem,
+  item: BaseItem | BaseItemUri,
   registryAddress: string
 ) {
   // Set registry as minter in the item
