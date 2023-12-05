@@ -39,13 +39,11 @@ async function main() {
   // Items
   const itemFactory = await ethers.getContractFactory("SpaceLasersItem");
   const trophyFactory = await ethers.getContractFactory("SpaceLasersTrophy");
-  const uniqueFactory = await ethers.getContractFactory("UniqueTrophy");
   const items: [string, BaseItem__factory | BaseItemUri__factory][] = [
     [
       "ipfs://bafybeidagvw2ykizo3uk5nhpzhh6xfw2guu4c453luie44h2pc7jqlgsoi/",
       itemFactory,
     ],
-    ["ipfs://", uniqueFactory],
   ];
   const trophy: [string, BaseItem__factory] = [
     "ipfs://bafybeidagvw2ykizo3uk5nhpzhh6xfw2guu4c453luie44h2pc7jqlgsoi/trophy.json",
@@ -102,14 +100,6 @@ async function main() {
       itemId: 5,
       amount: 1,
     },
-    // Unique trophy
-    {
-      points: 100,
-      duration: 0,
-      itemIdx: 1,
-      itemId: 0,
-      amount: 1,
-    },
   ];
 
   ///////////////////////////////////
@@ -134,27 +124,75 @@ async function main() {
     trophy
   );
 
+  console.log("Space Lasers: Items deployed to:", slInfo.items[0].itemAddress);
+  console.log("Space Lasers: Trophy deployed to:", slInfo.trophy?.itemAddress);
+
+  ///////////////////////////////////
+  // Define Unique Test Space
+
+  // Info
+  const info2: SpaceInfoStruct = {
+    name: "Unique Test",
+    url: "https://example.com/",
+    metadata: "ipfs://..../metadata.json", // Not in use yet
+    active: true,
+  };
+
+  // Items
+  const uniqueFactory = await ethers.getContractFactory("UniqueTrophy");
+  const items2: [string, BaseItem__factory | BaseItemUri__factory][] = [
+    ["ipfs://", uniqueFactory],
+  ];
+
+  // Achievements
+  const achievements2: AchievementDef[] = [
+    // Unique trophy
+    {
+      points: 0,
+      duration: 0,
+      itemIdx: 0,
+      itemId: 0,
+      amount: 1,
+    },
+  ];
+
+  ///////////////////////////////////
+  // Deploy Space Lasers
+
+  // Use the second account
+  console.log(
+    "Deploying Unique Test with the following account:",
+    owner.address
+  );
+
+  const spaceInfo = await deploySpace(
+    owner,
+    registry,
+    info2,
+    items2,
+    achievements2
+  );
+
+  console.log(
+    "Unique Test: Items deployed to:",
+    spaceInfo.items[0].itemAddress
+  );
+
   // Setup server as URI setter in unique trophy
   const item = await ethers.getContractAt(
     "UniqueTrophy",
-    slInfo.items[1].itemAddress
+    spaceInfo.items[0].itemAddress
   );
   const role = await item.URI_SETTER_ROLE();
   const tx = await item.connect(owner).grantRole(role, serverAddr);
   await tx.wait(1);
-
-  console.log("Space Lasers: Items deployed to:", slInfo.items[0].itemAddress);
-  console.log(
-    "Space Lasers: Unique Trophy deployed to:",
-    slInfo.items[1].itemAddress
-  );
-  console.log("Space Lasers: Trophy deployed to:", slInfo.trophy?.itemAddress);
 
   // Store addresses in file
   const addresses = {
     registry: registry.registryAddress,
     items: slInfo.items[0].itemAddress,
     trophy: slInfo.trophy?.itemAddress,
+    unique: spaceInfo.items[0].itemAddress,
   };
   fs.writeFileSync(
     "./scripts/addresses.json",
