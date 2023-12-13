@@ -32,7 +32,8 @@ async function main() {
   const info: SpaceInfoStruct = {
     name: "Space Lasers Test",
     url: "https://spacelasers.io/",
-    metadata: "ipfs://..../metadata.json", // Not in use yet
+    metadata:
+      "ipfs://bafkreidtlisrebvh7x4oysicy5dw3w3qiaroukeskthlao2v2fmn2l22va",
     active: true,
   };
 
@@ -134,7 +135,7 @@ async function main() {
   const info2: SpaceInfoStruct = {
     name: "Unique Test",
     url: "https://example.com/",
-    metadata: "ipfs://..../metadata.json", // Not in use yet
+    metadata: "",
     active: true,
   };
 
@@ -157,7 +158,7 @@ async function main() {
   ];
 
   ///////////////////////////////////
-  // Deploy Space Lasers
+  // Deploy Unique Test
 
   // Use the second account
   console.log(
@@ -187,12 +188,23 @@ async function main() {
   const tx = await item.connect(owner).grantRole(role, serverAddr);
   await tx.wait(1);
 
+  ///////////////////////////////////
+  // Deploy Template for custom Space Laser
+  const templateFactory = await ethers.getContractFactory("SpaceLasersCustom");
+
+  const customLaser = await templateFactory
+    .connect(owner)
+    .deploy(3, 0, "ipfs://");
+  await customLaser.waitForDeployment();
+  const customLaserAddress = await customLaser.getAddress();
+
   // Store addresses in file
   const addresses = {
     registry: registry.registryAddress,
     items: slInfo.items[0].itemAddress,
     trophy: slInfo.trophy?.itemAddress,
     unique: spaceInfo.items[0].itemAddress,
+    custom: customLaserAddress,
   };
   fs.writeFileSync(
     "./scripts/addresses.json",
