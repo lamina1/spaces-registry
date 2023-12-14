@@ -26,6 +26,34 @@ async function main() {
   console.log("Spaces Registry deployed to:", registry.registryAddress);
 
   ///////////////////////////////////
+  // Deploy Space Lasers
+
+  // Use the second account
+  const owner = signers[1];
+  console.log(
+    "Deploying Space Lasers with the following account:",
+    owner.address
+  );
+
+  const balanceOwner = await ethers.provider.getBalance(owner.address);
+  console.log("Account balance:", ethers.formatEther(balanceOwner));
+
+  ///////////////////////////////////
+  // Deploy Template for custom Space Laser
+  const templateFactory = await ethers.getContractFactory("SpaceLasersCustom");
+
+  const customLaser = await templateFactory
+    .connect(owner)
+    .deploy(3, 0, "ipfs://");
+  await customLaser.waitForDeployment();
+  const customLaserAddress = await customLaser.getAddress();
+
+  console.log(
+    "Space Lasers: Custom Laser Template deployed to:",
+    customLaserAddress
+  );
+
+  ///////////////////////////////////
   // Define Space Lasers
 
   // Info
@@ -33,7 +61,7 @@ async function main() {
     name: "Space Lasers Test",
     url: "https://spacelasers.io/",
     metadata:
-      "ipfs://bafkreidtlisrebvh7x4oysicy5dw3w3qiaroukeskthlao2v2fmn2l22va",
+      "ipfs://bafkreiamvsccozdltkw44l6phs5k5sdcilk35lfgqbzgcucfvikmsfpwtm",
     active: true,
   };
 
@@ -102,19 +130,6 @@ async function main() {
       amount: 1,
     },
   ];
-
-  ///////////////////////////////////
-  // Deploy Space Lasers
-
-  // Use the second account
-  const owner = signers[1];
-  console.log(
-    "Deploying Space Lasers with the following account:",
-    owner.address
-  );
-
-  const balanceOwner = await ethers.provider.getBalance(owner.address);
-  console.log("Account balance:", ethers.formatEther(balanceOwner));
 
   const slInfo = await deploySpace(
     owner,
@@ -187,16 +202,6 @@ async function main() {
   const role = await item.URI_SETTER_ROLE();
   const tx = await item.connect(owner).grantRole(role, serverAddr);
   await tx.wait(1);
-
-  ///////////////////////////////////
-  // Deploy Template for custom Space Laser
-  const templateFactory = await ethers.getContractFactory("SpaceLasersCustom");
-
-  const customLaser = await templateFactory
-    .connect(owner)
-    .deploy(3, 0, "ipfs://");
-  await customLaser.waitForDeployment();
-  const customLaserAddress = await customLaser.getAddress();
 
   // Store addresses in file
   const addresses = {
