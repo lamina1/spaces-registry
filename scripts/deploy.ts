@@ -44,7 +44,7 @@ async function main() {
 
   const customLaser = await templateFactory
     .connect(owner)
-    .deploy(3, 0, "ipfs://");
+    .deploy(3, ethers.parseEther("1"), "ipfs://");
   await customLaser.waitForDeployment();
   const customLaserAddress = await customLaser.getAddress();
 
@@ -61,7 +61,7 @@ async function main() {
     name: "Space Lasers Test",
     url: "https://spacelasers.io/",
     metadata:
-      "ipfs://bafkreiamvsccozdltkw44l6phs5k5sdcilk35lfgqbzgcucfvikmsfpwtm",
+      "ipfs://bafkreifsjl737rjv54um264g5gly65jay2waxd4wz32z63bskflyhvltby",
     active: true,
   };
 
