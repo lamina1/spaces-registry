@@ -44,7 +44,7 @@ async function main() {
 
   const customLaser = await templateFactory
     .connect(owner)
-    .deploy(3, ethers.parseEther("1"), "ipfs://");
+    .deploy(1000000000, ethers.parseEther("1"), "ipfs://");
   await customLaser.waitForDeployment();
   const customLaserAddress = await customLaser.getAddress();
 
@@ -203,6 +203,54 @@ async function main() {
   const tx = await item.connect(owner).grantRole(role, serverAddr);
   await tx.wait(1);
 
+  ///////////////////////////////////
+  // Deploy Template for Artwork
+  const templateFact = await ethers.getContractFactory("BaseTemplate");
+
+  const artwork = await templateFactory
+    .connect(owner)
+    .deploy(1000000000, ethers.parseEther("0.1"), "ipfs://");
+  await artwork.waitForDeployment();
+  const artworkAddress = await artwork.getAddress();
+
+  console.log("Studio: Artwork Template deployed to:", artworkAddress);
+
+  ///////////////////////////////////
+  // Define Studio Space
+
+  // Info
+  const info3: SpaceInfoStruct = {
+    name: "LAMINA1 Studio",
+    url: "https://hub.lamina1.com/studio",
+    metadata:
+      "ipfs://bafkreiaj6gc7kq55n5dh7kkpvce4b2dykep4rf26ho5i4djmjdh6ppdey4",
+    active: true,
+  };
+
+  // Items
+  const baseFactory = await ethers.getContractFactory("BaseItem");
+  const items3: [string, BaseItem__factory][] = [["", baseFactory]];
+
+  // Achievements
+  const achievements3: AchievementDef[] = [
+    // Base item (dummy)
+    {
+      points: 0,
+      duration: 0,
+      itemIdx: 0,
+      itemId: 0,
+      amount: 1,
+    },
+  ];
+
+  ///////////////////////////////////
+  // Deploy Studio Space
+
+  // Use the second account
+  console.log("Deploying Studio with the following account:", owner.address);
+
+  await deploySpace(owner, registry, info3, items3, achievements3);
+
   // Store addresses in file
   const addresses = {
     registry: registry.registryAddress,
@@ -210,6 +258,7 @@ async function main() {
     trophy: slInfo.trophy?.itemAddress,
     unique: spaceInfo.items[0].itemAddress,
     custom: customLaserAddress,
+    artwork: artworkAddress,
   };
   fs.writeFileSync(
     "./scripts/addresses.json",
