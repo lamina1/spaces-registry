@@ -27,6 +27,14 @@ async function main() {
     await tx.wait(1);
     console.log(`Funded ${address} with 1000 L1`);
   }
+
+  // Fund faucet
+  const faucet = "0x66A4461d98E29e89c1633f3467CcFB9cfC146D19";
+  const tx = await deployer.sendTransaction({
+    to: faucet,
+    value: ethers.parseEther("100000"),
+  });
+  console.log(`Funded faucet ${faucet} with 100k L1`);
 }
 
 main()
