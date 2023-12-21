@@ -61,7 +61,7 @@ async function main() {
     name: "Space Lasers Test",
     url: "https://spacelasers.io/",
     metadata:
-      "ipfs://bafkreididxqsmjobkfiael37hzqvxogzxqa2mekthl7hgaoa6yl2hehiza",
+      "ipfs://bafkreietsk7ncechi3xnosybkvx3jtfe7xzwk6hu6shtdmozeq3lxzessa",
     active: true,
   };
 
@@ -223,7 +223,7 @@ async function main() {
     name: "LAMINA1 Studio",
     url: "https://hub.lamina1.com/studio",
     metadata:
-      "ipfs://bafkreifqv763jz56wudvcs2j66onrrqzrgxw6p776g2abhfmgg7gwliweq",
+      "ipfs://bafkreidtgjv7zo2wwwlzigd4yrpcwssyw6ha2x4uinfeeqh3tzoczpguwq",
     active: true,
   };
 
