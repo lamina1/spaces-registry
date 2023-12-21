@@ -61,7 +61,7 @@ async function main() {
     name: "Space Lasers Test",
     url: "https://spacelasers.io/",
     metadata:
-      "ipfs://bafkreietsk7ncechi3xnosybkvx3jtfe7xzwk6hu6shtdmozeq3lxzessa",
+      "ipfs://bafkreigdvab3qwmao3hpvdxddwumzgfier76aoghgcrcswfot6zgbdj5tq",
     active: true,
   };
 
@@ -209,7 +209,7 @@ async function main() {
 
   const artwork = await templateFactory
     .connect(owner)
-    .deploy(1000000000, ethers.parseEther("0.1"), "ipfs://");
+    .deploy(1000000000, ethers.parseEther("1"), "ipfs://");
   await artwork.waitForDeployment();
   const artworkAddress = await artwork.getAddress();
 
@@ -223,7 +223,7 @@ async function main() {
     name: "LAMINA1 Studio",
     url: "https://hub.lamina1.com/studio",
     metadata:
-      "ipfs://bafkreidtgjv7zo2wwwlzigd4yrpcwssyw6ha2x4uinfeeqh3tzoczpguwq",
+      "ipfs://bafkreiafw45a3lmb66l2kc5a6jfx463ngkzcwuve4u6lmkp6zfzvvh7p6i",
     active: true,
   };
 
