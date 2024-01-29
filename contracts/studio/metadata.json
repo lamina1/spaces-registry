@@ -1,0 +1,241 @@
+{
+    "name": "LAMINA1 Studio",
+    "url": "https://hub.lamina1.com/studio",
+    "logo": "ipfs://bafybeie2o4yuzw6h2xglbjo2ycyyyes4a3ujjuevd3s3q7gt4vm75n3ugq",
+    "icon": "ipfs://bafybeie2o4yuzw6h2xglbjo2ycyyyes4a3ujjuevd3s3q7gt4vm75n3ugq",
+    "image": "ipfs://bafybeie2o4yuzw6h2xglbjo2ycyyyes4a3ujjuevd3s3q7gt4vm75n3ugq",
+    "description": "Introducing the LAMINA1 Studio, where creators can easily build and publish interoperable items you can use in-game right away.",
+    "version": "0.0.1",
+    "creator": {
+      "name": "LAMINA1",
+      "link": "https://lamina1.com",
+      "logo": ""
+    },
+    "settings": {
+      "leaderboard": {
+        "enabled": false
+      },
+      "login": {
+        "enabled": false,
+        "method": "redirect"
+      },
+      "minting": {
+        "enabled": false,
+        "method": "points"
+      }
+    },
+    "rules": {},
+    "templates": {
+      "1": {
+        "address": "0xB8D0AefE7274Df4d10204FF830dE2FEe018C2eAA",
+        "name": "Artwork",
+        "shortDescription": "A general Template you can use to publish any still/2D image to the LAMINA1 blockchain.",
+        "description": "Showcase your original art or creation with the Artwork Template. Using this simple tool, you can publish any 2D image to the LAMINA1 Betanet, and set unique properties, metadata, rights and royalties for its use in future open metaverse Spaces, galleries, and storefronts on the LAMINA1 Hub.",
+        "image": "ipfs://bafybeie2o4yuzw6h2xglbjo2ycyyyes4a3ujjuevd3s3q7gt4vm75n3ugq",
+        "creator": {
+          "name": "LAMINA1",
+          "link": "https://lamina1.com"
+        },
+        "tags": ["Art"],
+        "techSpec": {
+          "format": "PNG and JPG only",
+          "size": "1MB Maximum"
+        },
+        "item": {
+          "creator": {
+            "title": "Creator",
+            "description": "Edit creator information.",
+            "type": "object",
+            "required": false,
+            "rules": {
+              "keys": ["name", "link"]
+            },
+            "attributes": {
+              "name": {
+                "title": "Name",
+                "description": "The name of the creator.",
+                "type": "text",
+                "required": true,
+                "rules": {
+                  "min": 1,
+                  "max": 60
+                }
+              },
+              "link": {
+                "title": "Link",
+                "description": "The link to the creator.",
+                "type": "text",
+                "required": false,
+                "rules": {
+                  "min": 1,
+                  "max": 300
+                }
+              }
+            }
+          },
+          "name": {
+            "title": "Name your artwork",
+            "description": "Give your artwork a name.",
+            "type": "text",
+            "required": true,
+            "rules": {
+              "min": 3,
+              "max": 100
+            }
+          },
+          "description": {
+            "title": "Describe your artwork",
+            "description": "Give your artwork a description.",
+            "type": "text",
+            "required": true,
+            "rules": {
+              "min": 1,
+              "max": 300
+            }
+          },
+          "asset": {
+            "title": "Artwork",
+            "description": "Select a artwork.",
+            "type": "image",
+            "required": true,
+            "rules": {
+              "type": { "image/png": [], "image/jpeg": [], "image/tiff": [] },
+              "min": 0,
+              "max": 1000,
+              "unit": "KB",
+              "keyName": "image"
+            }
+          },
+          "tags": {
+            "title": "Tags",
+            "description": "Add tags to your artwork.",
+           "type": "list",
+            "required": true,
+            "rules": {
+              "min": 1,
+              "max": 10,
+              "tagSize": {
+                "min": 1,
+                "max": 30
+              }
+            }
+          },
+          "rights": {
+            "title": "Rights",
+            "description": "Add rights",
+            "type": "list",
+            "required": true,
+            "rules": {
+              "questions": [
+                {
+                  "id": 1,
+                  "question": " Do you want to license this item to allow other creators to use it?",
+                  "answers": [
+                    {
+                      "response": "Yes. I want to create a copyright license that allows other creators to use, distribute, and modify this item in their projects.",
+                      "value": 1,
+                      "nextQuestionId": 2,
+                      "icon": ""
+                    },
+                    {
+                      "response": "No. I prefer to retain all my default exclusive copyrights.",
+                      "value": 0,
+                      "nextQuestionId": 4,
+                      "icon": "all-rights"
+                    }
+                  ]
+                },
+                {
+                  "id": 2,
+                  "question": "Should your work be credited to your username or address whenever it is used?",
+                  "answers": [
+                    {
+                      "response": "Yes. Proper attribution is required whenever my work is used.",
+                      "value": 1,
+                      "nextQuestionId": 3,
+                      "icon": "attribution"
+                    },
+                    {
+                      "response": "No. Users are not obligated to credit me for using this item in their projects.",
+                      "value": 0,
+                      "nextQuestionId": 3,
+                      "icon": ""
+                    }
+                  ]
+                },
+                {
+                  "id": 3,
+                  "question": "Are you comfortable with your work being utilized in commercial projects?",
+                  "answers": [
+                    {
+                      "response": "Yes. I permit the use of my work in revenue-generating projects.",
+                      "value": 1,
+                      "nextQuestionId": 4,
+                      "icon": "commercial"
+                    },
+                    {
+                      "response": "No. My work should only be used for educational, personal, or non-commercial purposes.",
+                      "value": 0,
+                      "nextQuestionId": 4,
+                      "icon": "non-commercial"
+                    }
+                  ]
+                },
+                {
+                  "id": 4,
+                  "question": "Can your work be used to train AI models?",
+                  "answers": [
+                    {
+                      "response": "Yes. Creators using AI can train on, reference, and include this item in their projects.",
+                      "value": 1,
+                      "nextQuestionId": 0,
+                      "icon": "ai-reference"
+                    },
+                    {
+                      "response": "No. Creators using AI cannot use this item.",
+                      "value": 0,
+                      "nextQuestionId": 0,
+                      "icon": "non-ai-reference"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "royalties": {
+            "title": "Royalties",
+            "description": "Add royalties",
+            "type": "list",
+            "required": true,
+            "rules": {
+              "min": 1,
+              "max": 10,
+              "percentage": {
+              "min": 0,
+              "max": 1,
+              "precision": 0.01
+              }
+            }
+          },
+          "completedStepper": {
+            "title": "Completed Stepper",
+            "description": "The completed stepper.",
+            "type": "number",
+            "required": true,
+            "rules": {
+              "mainTitle": "Item Published",
+              "mainDescription": "Nice work. Your creation is now officially published to the LAMINA1 Betanet",
+              "extraInfo": [
+                {
+                  "title": "View Your Creation",
+                  "description": "View [Item Name] in your Items tab, where you can access the full image you published, its description and properties, and share it with others.",
+                  "buttonText": "View Item",
+                  "buttonLink": "/items"
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+}

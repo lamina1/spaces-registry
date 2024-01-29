@@ -58,10 +58,10 @@ async function main() {
 
   // Info
   const info: SpaceInfoStruct = {
-    name: "Space Lasers Test",
+    name: "Space Lasers",
     url: "https://spacelasers.io/",
     metadata:
-      "ipfs://bafkreigdvab3qwmao3hpvdxddwumzgfier76aoghgcrcswfot6zgbdj5tq",
+      "ipfs://bafkreifv7c3w6ivcztj5rw62rrb5lqgpcnn52mkpgokrqh55w2c7xvsvaa",
     active: true,
   };
 
@@ -144,70 +144,10 @@ async function main() {
   console.log("Space Lasers: Trophy deployed to:", slInfo.trophy?.itemAddress);
 
   ///////////////////////////////////
-  // Define Unique Test Space
-
-  // Info
-  const info2: SpaceInfoStruct = {
-    name: "Unique Test",
-    url: "https://example.com/",
-    metadata: "",
-    active: true,
-  };
-
-  // Items
-  const uniqueFactory = await ethers.getContractFactory("UniqueTrophy");
-  const items2: [string, BaseItem__factory | BaseItemUri__factory][] = [
-    ["ipfs://", uniqueFactory],
-  ];
-
-  // Achievements
-  const achievements2: AchievementDef[] = [
-    // Unique trophy
-    {
-      points: 0,
-      duration: 0,
-      itemIdx: 0,
-      itemId: 0,
-      amount: 1,
-    },
-  ];
-
-  ///////////////////////////////////
-  // Deploy Unique Test
-
-  // Use the second account
-  console.log(
-    "Deploying Unique Test with the following account:",
-    owner.address
-  );
-
-  const spaceInfo = await deploySpace(
-    owner,
-    registry,
-    info2,
-    items2,
-    achievements2
-  );
-
-  console.log(
-    "Unique Test: Items deployed to:",
-    spaceInfo.items[0].itemAddress
-  );
-
-  // Setup server as URI setter in unique trophy
-  const item = await ethers.getContractAt(
-    "UniqueTrophy",
-    spaceInfo.items[0].itemAddress
-  );
-  const role = await item.URI_SETTER_ROLE();
-  const tx = await item.connect(owner).grantRole(role, serverAddr);
-  await tx.wait(1);
-
-  ///////////////////////////////////
   // Deploy Template for Artwork
-  const templateFact = await ethers.getContractFactory("BaseTemplate");
+  const artworkFact = await ethers.getContractFactory("Artwork");
 
-  const artwork = await templateFactory
+  const artwork = await artworkFact
     .connect(owner)
     .deploy(1000000000, ethers.parseEther("1"), "ipfs://");
   await artwork.waitForDeployment();
@@ -219,20 +159,20 @@ async function main() {
   // Define Studio Space
 
   // Info
-  const info3: SpaceInfoStruct = {
+  const info2: SpaceInfoStruct = {
     name: "LAMINA1 Studio",
     url: "https://hub.lamina1.com/studio",
     metadata:
-      "ipfs://bafkreiafw45a3lmb66l2kc5a6jfx463ngkzcwuve4u6lmkp6zfzvvh7p6i",
+      "ipfs://bafkreieozjwuqoyy65zuggok7kk4ttyhwbaunnyqwfpioiivej3vxqrz3a",
     active: true,
   };
 
   // Items
   const baseFactory = await ethers.getContractFactory("BaseItem");
-  const items3: [string, BaseItem__factory][] = [["", baseFactory]];
+  const items2: [string, BaseItem__factory][] = [["", baseFactory]];
 
   // Achievements
-  const achievements3: AchievementDef[] = [
+  const achievements2: AchievementDef[] = [
     // Base item (dummy)
     {
       points: 0,
@@ -249,14 +189,69 @@ async function main() {
   // Use the second account
   console.log("Deploying Studio with the following account:", owner.address);
 
-  await deploySpace(owner, registry, info3, items3, achievements3);
+  await deploySpace(owner, registry, info2, items2, achievements2);
+
+  ///////////////////////////////////
+  // Define Nyric Space
+
+  // Info
+  const info3: SpaceInfoStruct = {
+    name: "Nyric",
+    url: "https://hub.lamina1.com/",
+    metadata:
+      "ipfs://bafkreifp2sufjeejxszh3grhzkpf3w7vp4puuxkndyd3oc3vojfaiybnvi",
+    active: true,
+  };
+
+  // Items
+  const nyricFactory = await ethers.getContractFactory("Nyric");
+  const items3: [string, BaseItem__factory | BaseItemUri__factory][] = [
+    ["ipfs://", nyricFactory],
+  ];
+
+  // Achievements
+  const achievements3: AchievementDef[] = [
+    // Unique trophy
+    {
+      points: 0,
+      duration: 0,
+      itemIdx: 0,
+      itemId: 0,
+      amount: 1,
+    },
+  ];
+
+  ///////////////////////////////////
+  // Deploy Nyric
+
+  // Use the second account
+  console.log("Deploying Nyric with the following account:", owner.address);
+
+  const spaceInfo = await deploySpace(
+    owner,
+    registry,
+    info3,
+    items3,
+    achievements3
+  );
+
+  console.log("Nyric: Items deployed to:", spaceInfo.items[0].itemAddress);
+
+  // Setup server as URI setter in Nyric
+  const item = await ethers.getContractAt(
+    "Nyric",
+    spaceInfo.items[0].itemAddress
+  );
+  const role = await item.URI_SETTER_ROLE();
+  const tx = await item.connect(owner).grantRole(role, serverAddr);
+  await tx.wait(1);
 
   // Store addresses in file
   const addresses = {
     registry: registry.registryAddress,
     items: slInfo.items[0].itemAddress,
     trophy: slInfo.trophy?.itemAddress,
-    unique: spaceInfo.items[0].itemAddress,
+    nyric: spaceInfo.items[0].itemAddress,
     custom: customLaserAddress,
     artwork: artworkAddress,
   };

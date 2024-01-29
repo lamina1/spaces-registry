@@ -1,0 +1,556 @@
+{
+  "name": "Space Lasers",
+  "url": "https://www.spacelasers.io/",
+  "logo": "ipfs://bafybeicj3ag6sfkgabj4pr4h7uqrq4sbw23sypehuocwmr7j7nn5oo6yeq/logo.png",
+  "icon": "ipfs://bafybeicj3ag6sfkgabj4pr4h7uqrq4sbw23sypehuocwmr7j7nn5oo6yeq/icon.png",
+  "image": "ipfs://bafybeicj3ag6sfkgabj4pr4h7uqrq4sbw23sypehuocwmr7j7nn5oo6yeq/image.png",
+  "title": "Space Lasers by LAMINA1",
+  "description": "Introducing our first open metaverse demo experience. Employ and earn NFT lasers to obliterate intergalactic enemies, featuring the artwork of five L1 Creators!",
+  "version": "0.0.1",
+  "creator": {
+    "name": "LAMINA1",
+    "link": "https://lamina1.com",
+    "logo": "ipfs://bafkreicj5mwz7ictho3eavxsag4ciakblc65jwb5c7mm4m4dbukxzbxiei"
+  },
+  "settings": {
+    "leaderboard": {
+      "enabled": true
+    },
+    "login": {
+      "enabled": true,
+      "method": "redirect"
+    },
+    "minting": {
+      "enabled": true,
+      "method": "points"
+    }
+  },
+  "rules": {
+    "displayProperties": {
+      "required": [
+        {
+          "key": "ItemType",
+          "type": "string",
+          "values": ["Weapon"]
+        },
+        {
+          "key": "Weapon",
+          "type": "string",
+          "values": ["Laser"]
+        }
+      ],
+      "optional": [
+        {
+          "key": "Motion",
+          "type": "string",
+          "values": ["Straight", "Wobble", "Wavy", "Random"]
+        }
+      ],
+      "disallow": []
+    },
+    "behaviorProperties": {
+      "required": [
+        {
+          "key": "colorStops",
+          "type": "number",
+          "min": 5,
+          "max": 7
+        },
+       {
+          "key": "shotSizeMin",
+          "type": "number",
+          "min": 0.1,
+          "max": 4.5
+        },
+        {
+          "key": "shotSizeMax",
+          "type": "number",
+          "min": 0.5,
+          "max": 5.0
+        },
+        {
+          "key": "shotCount",
+          "type": "number",
+          "min": 1,
+          "max": 4
+        },
+        {
+          "key": "moveSpeed",
+          "type": "number",
+          "min": 50,
+          "max": 200
+        },
+        {
+          "key": "accuracy",
+          "type": "number",
+          "min": 0,
+          "max": 1
+        },
+        {
+          "key": "cooldown",
+          "type": "number",
+          "min": 0.1,
+          "max": 1.0
+        },
+        {
+          "key": "burstTime",
+          "type": "number",
+          "min": 0,
+          "max": 1
+        },
+        {
+          "key": "damage",
+          "type": "number",
+          "min": 1,
+          "max": 5
+        }
+      ],
+      "optional": [
+        {
+          "key": "wobbleMovement",
+          "type": "boolean",
+          "validation": {
+            "true": [
+              {
+                "key": "wobbleFrequency",
+                "type": "number",
+                "min": 0.05,
+                "max": 0.2
+              },
+              {
+                "key": "rotationSpeed",
+                "type": "number",
+                "min": 500,
+                "max": 2000
+              }
+            ]
+          }
+        },
+        {
+          "key": "sineWaveMovement",
+          "type": "boolean",
+          "validation": {
+            "true": [
+              {
+                "key": "sineFrequency",
+                "type": "number",
+                "min": 3,
+                "max": 15
+              },
+              {
+                "key": "sineAmplitude",
+                "type": "number",
+                "min": 3,
+                "max": 15
+              }
+            ]
+          }
+        },
+        {
+          "key": "movementType",
+          "type": "number",
+          "min": 0,
+          "max": 2,
+          "validation": {
+            "1": [
+              {
+                "key": "wobbleFrequency",
+                "type": "number",
+                "min": 0.05,
+                "max": 0.2
+              },
+              {
+                "key": "rotationSpeed",
+                "type": "number",
+                "min": 750,
+                "max": 2000
+              }
+            ],
+            "2": [
+              {
+                "key": "sineFrequency",
+                "type": "number",
+                "min": 5,
+                "max": 15
+              },
+              {
+                "key": "sineAmplitude",
+                "type": "number",
+                "min": 5,
+                "max": 15
+              }
+            ]
+          }
+        }
+      ],
+      "disallow": []
+    }
+  },
+  "templates": {
+    "1": {
+      "address": "0xB4564620578a75e2B732d4d09BB96A7a57b5968B",
+      "name": "Custom Laser",
+      "shortDescription": "A specialized Template designed to create items that will be playable in Space Lasers.",
+      "description": "Try the new L1 Custom Laser Template and prepare for intergalactic battle. This Template allows you to create a unique laser that can be used in-game in the Space Lasers demo on the LAMINA1 Hub. Adjust its behavior properties to match your gaming strategy and customize its appearance to mirror your personal style. Then equip this laser using the Hub Overlay to unlock new levels and achievements, and to use it in other LAMINA1 enabled Spaces later on.",
+      "image": "ipfs://bafybeievrrkkbslhdpw74l2zu7d2ubxdbuikk5jntq3cwmdnneakixzfdy",
+      "creator": {
+        "name": "LAMINA1",
+        "link": "https://lamina1.com"
+      },
+      "tags": [
+        "SpaceLasers"
+      ],
+      "displayProperties": [
+        {
+            "key": "ItemClass",
+            "value": "Usable"
+        },
+        {
+            "key": "ItemType",
+            "value": "Weapon"
+        },
+        {
+            "key": "Weapon",
+            "value": "Laser"
+        }
+      ],
+      "techSpec": {
+        "format": "PNG and JPG only",
+        "size": "1MB Maximum"
+      },
+      "item": {
+        "creator": {
+          "title": "Creator",
+          "description": "Edit creator information.",
+          "type": "object",
+          "required": false,
+          "rules": {
+            "keys": ["name", "link"]
+          },
+          "attributes": {
+            "name": {
+              "title": "Name",
+              "description": "The name of the creator.",
+              "type": "text",
+              "required": true,
+              "rules": {
+                "min": 1,
+                "max": 60
+              }
+            },
+            "link": {
+              "title": "Link",
+              "description": "The link to the creator.",
+              "type": "text",
+              "required": false,
+              "rules": {
+                "min": 1,
+                "max": 300
+              }
+            }
+          }
+        },
+        "name": {
+          "title": "Name your laser",
+          "description": "Give your laser a name.",
+          "type": "text",
+          "required": true,
+          "rules": {
+            "min": 3,
+            "max": 100
+          }
+        },
+        "description": {
+          "title": "Describe your laser",
+          "description": "Give your laser a description.",
+          "type": "text",
+          "required": true,
+          "rules": {
+            "min": 1,
+            "max": 300
+          }
+        },
+        "asset": {
+          "title": "Laser",
+          "description": "Select a laser.",
+          "type": "image",
+          "required": true,
+          "rules": {
+            "type": { "image/png": [], "image/jpeg": [], "image/tiff": [] },
+            "min": 0,
+            "max": 1000,
+            "unit": "KB",
+            "keyName": "image"
+          }
+        },
+        "tags": {
+          "title": "Tags",
+          "description": "Add tags to your laser.",
+          "type": "list",
+          "required": true,
+          "rules": {
+            "min": 1,
+            "max": 10,
+            "tagSize": {
+              "min": 1,
+              "max": 30
+            }
+          }
+        },
+        "properties": {
+          "title": "Define Properties",
+          "description": "Properties define how your laser will look and behave when deployed into Space Lasers and other games/experiences.",
+          "type": "object",
+          "required": true,
+          "rules": {
+            "keyName": "behaviorProperties"
+          },
+          "attributes": {
+            "randomColorGuides": {
+              "title": "Laser Colors",
+              "description": "Select 3 to 5 colors for your custom laser",
+              "type": "list",
+              "values": ["Red", "Green", "Blue", "Purple", "Cyan", "Yellow", "Orange", "White"],
+              "required": true,
+              "rules": {
+                "min": 3,
+                "max": 5
+              }
+            },
+            "shotSize": {
+              "title": "Projectile Size",
+              "description": "Set how large your laser is when you shoot it",
+              "type": "range",
+              "required": true,
+              "rules": {
+                "lower": {
+                  "min": 0.1,
+                  "max": 1,
+                  "keyName": "shotSizeMin"
+                },
+                "upper": {
+                  "min": 1,
+                  "max": 4.5,
+                  "keyName": "shotSizeMax"
+                },
+                "precision": 0.1
+              }
+            },
+            "movementType": {
+              "title": "Movement Type",
+              "description": "Determine how your laser moves through space",
+              "type": "enum",
+              "values": ["Straight", "Wobble", "Wavy"],
+              "required": true,
+              "rules": {
+                "attributes": {
+                  "Straight": {},
+                  "Wobble": {
+                    "wobbleFrequency": {
+                      "title": "Wobble Frequency",
+                      "description": "Set how much time passes between random direction changes",
+                      "type": "number",
+                      "required": true,
+                      "rules": {
+                        "min": 0.05,
+                        "max": 0.2,
+                        "precision": 0.01
+                      }
+                    },
+                    "rotationSpeed": {
+                      "title": "Rotation Speed",
+                      "description": "Determine how fast your laser orients to its new direction",
+                      "type": "number",
+                      "required": true,
+                      "rules": {
+                        "min": 750,
+                        "max": 2000,
+                        "precision": 50
+                      }
+                    }
+                  },
+                  "Wavy": {
+                    "sineFrequency": {
+                      "title": "Wave Frequency",
+                      "description": "Determine how fast your wavy laser oscillates",
+                      "type": "number",
+                      "required": true,
+                      "rules": {
+                        "min": 5,
+                        "max": 15,
+                        "precision": 1
+                      }
+                    },
+                    "sineAmplitude": {
+                      "title": "Wave Amplitude",
+                      "description": "Determine how high your wavy laser goes",
+                      "type": "number",
+                      "required": true,
+                      "rules": {
+                        "min": 5,
+                        "max": 15,
+                        "precision": 1
+                      }
+                    }
+                  }
+                },
+                "presets": {
+                  "Straight": {
+                    "colorStops": 7,
+                    "movementType": 0,
+                    "shotCount": 1,
+                    "moveSpeed": 200,
+                    "accuracy": 0.98,
+                    "cooldown": 0.15,
+                    "burstTime": 0.1,
+                    "damage": 1
+                  },
+                  "Wobble": {
+                    "colorStops": 7,
+                    "movementType": 1,
+                    "shotCount": 4,
+                    "moveSpeed": 50,
+                    "accuracy": 0.98,
+                    "cooldown": 0.8,
+                    "burstTime": 0.05,
+                    "damage": 2
+                  },
+                  "Wavy": {
+                    "colorStops": 7,
+                    "movementType": 2,
+                    "shotCount": 2,
+                    "moveSpeed": 200,
+                    "accuracy": 1,
+                    "cooldown": 0.2,
+                    "burstTime": 0,
+                    "damage": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        "rights": {
+          "title": "Rights",
+          "description": "Add rights",
+          "type": "list",
+          "required": true,
+          "rules": {
+            "questions": [
+              {
+                "id": 1,
+                "question": " Do you want to license this item to allow other creators to use it?",
+                "answers": [
+                  {
+                    "response": "Yes. I want to create a copyright license that allows other creators to use, distribute, and modify this item in their projects.",
+                    "value": 1,
+                    "nextQuestionId": 2,
+                    "icon": ""
+                  },
+                  {
+                    "response": "No. I prefer to retain all my default exclusive copyrights.",
+                    "value": 0,
+                    "nextQuestionId": 4,
+                    "icon": "all-rights"
+                  }
+                ]
+              },
+              {
+                "id": 2,
+                "question": "Should your work be credited to your username or address whenever it is used?",
+                "answers": [
+                  {
+                    "response": "Yes. Proper attribution is required whenever my work is used.",
+                    "value": 1,
+                    "nextQuestionId": 3,
+                    "icon": "attribution"
+                  },
+                  {
+                    "response": "No. Users are not obligated to credit me for using this item in their projects.",
+                    "value": 0,
+                    "nextQuestionId": 3,
+                    "icon": ""
+                  }
+                ]
+              },
+              {
+                "id": 3,
+                "question": "Are you comfortable with your work being utilized in commercial projects?",
+                "answers": [
+                  {
+                    "response": "Yes. I permit the use of my work in revenue-generating projects.",
+                    "value": 1,
+                    "nextQuestionId": 4,
+                    "icon": "commercial"
+                  },
+                  {
+                    "response": "No. My work should only be used for educational, personal, or non-commercial purposes.",
+                    "value": 0,
+                    "nextQuestionId": 4,
+                    "icon": "non-commercial"
+                  }
+                ]
+              },
+              {
+                "id": 4,
+                "question": "Can your work be used to train AI models?",
+                "answers": [
+                  {
+                    "response": "Yes. Creators using AI can train on, reference, and include this item in their projects.",
+                    "value": 1,
+                    "nextQuestionId": 0,
+                    "icon": "ai-reference"
+                  },
+                  {
+                    "response": "No. Creators using AI cannot use this item.",
+                    "value": 0,
+                    "nextQuestionId": 0,
+                    "icon": "non-ai-reference"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "royalties": {
+          "title": "Royalties",
+          "description": "Add royalties",
+          "type": "list",
+          "required": true,
+          "rules": {
+            "min": 1,
+            "max": 10,
+            "percentage": {
+              "min": 0,
+              "max": 1,
+              "precision": 0.01
+            }
+          }
+        },
+        "completedStepper": {
+          "title": "Completed Stepper",
+          "description": "The completed stepper.",
+          "type": "number",
+          "required": true,
+          "rules": {
+            "mainTitle": "Item Published",
+            "mainDescription": "Nice work. Your creation is now officially published to the LAMINA1 Betanet",
+            "extraInfo": [
+              {
+                "title": "View Your Creation",
+                "description": "View [Item Name] in your Items tab, where you can access the full image you published, its description and properties, and share it with others.",
+                "buttonText": "View Item",
+                "buttonLink": "/items"
+              },
+              {
+                "title": "See Your Item in Action",
+                "description": "You can now use this item in Space Lasers by opening up your Hub Overlay sidebar and equipping it in-game.",
+                "buttonText": "Play Space Lasers"
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

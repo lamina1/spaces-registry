@@ -1,7 +1,7 @@
 import { ethers } from "hardhat";
 import { deploySpace, AchievementDef } from "./utils/deploy";
 import { SpaceInfoStruct } from "../typechain-types/contracts/SpaceRegistry";
-import { BaseItem__factory } from "../typechain-types";
+import { BaseItemUri__factory, BaseItem__factory } from "../typechain-types";
 import promptUser from "./utils/prompt";
 
 async function main() {
@@ -33,21 +33,21 @@ async function main() {
   const info: SpaceInfoStruct = {
     name: "", // FILL THIS IN
     url: "", // FILL THIS IN
-    metadata: "ipfs://..../metadata.json", // Not in use yet
+    metadata: "", // FILL THIS IN
     active: true,
   };
 
   // Items
   const itemFactory = await ethers.getContractFactory("MultipleItem"); // MODIFY ITEM CONTRACT IF NEEDED
   const trophyFactory = await ethers.getContractFactory("Trophy"); // MODIFY ITEM CONTRACT IF NEEDED
-  const items: [string, BaseItem__factory][] = [
+  const items: [string, BaseItem__factory | BaseItemUri__factory][] = [
     [
-      "ipfs://...", // DEFINE METADATA URL
+      "", // DEFINE METADATA URL
       itemFactory,
     ],
   ];
-  const trophy: [string, BaseItem__factory] = [
-    "ipfs://...", // DEFINE METADATA URL
+  const trophy: [string, BaseItem__factory | BaseItemUri__factory] = [
+    "", // DEFINE METADATA URL
     trophyFactory,
   ];
 
@@ -81,7 +81,8 @@ async function main() {
   slInfo.items.forEach((item, idx) => {
     console.log(`Space: Item ${idx} deployed to ${item.itemAddress}`);
   });
-  console.log("Space: Trophy deployed to:", slInfo.trophy?.itemAddress);
+  slInfo.trophy &&
+    console.log("Space: Trophy deployed to:", slInfo.trophy?.itemAddress);
 }
 
 main()
