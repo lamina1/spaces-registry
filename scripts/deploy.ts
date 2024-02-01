@@ -61,7 +61,7 @@ async function main() {
     name: "Space Lasers",
     url: "https://spacelasers.io/",
     metadata:
-      "ipfs://bafkreifv7c3w6ivcztj5rw62rrb5lqgpcnn52mkpgokrqh55w2c7xvsvaa",
+      "ipfs://bafkreigg7mpuwarmmbnpqx5xnfltkzdi6id3ej5mh3jue3sdj7a7k5mhiq",
     active: true,
   };
 
@@ -199,7 +199,7 @@ async function main() {
     name: "Nyric",
     url: "https://hub.lamina1.com/",
     metadata:
-      "ipfs://bafkreifp2sufjeejxszh3grhzkpf3w7vp4puuxkndyd3oc3vojfaiybnvi",
+      "ipfs://bafkreiet23jwuyquam4be76tqgvceun3fkfydfduso4kjsaut534lcgfi4",
     active: true,
   };
 
