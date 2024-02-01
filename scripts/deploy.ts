@@ -199,7 +199,7 @@ async function main() {
     name: "Nyric",
     url: "https://hub.lamina1.com/",
     metadata:
-      "ipfs://bafkreiet23jwuyquam4be76tqgvceun3fkfydfduso4kjsaut534lcgfi4",
+      "ipfs://bafkreidqvykvqxu2uxnm2imyqtj4kxs4akjjyflvtpbropgqrtygy4zf7a",
     active: true,
   };
 
