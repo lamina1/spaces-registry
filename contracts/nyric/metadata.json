@@ -9,6 +9,7 @@
   "shortDescription": "Welcome to Nyric, a generative AI open world sandbox. Craft, build, and explore completely unique worlds that are procedurally spawned at runtime based on your prompt!",
   "description": "Welcome to Nyric, a generative AI open world sandbox! As an exclusive first alpha player, you can craft, build, and explore completely unique worlds that are procedurally spawned at runtime based on your prompt! Complete LLM-generated quests to grow immersive stories. When you’re done you can submit them back to the space and the story summary and metadata will be minted as your very own item! The world variety, game mechanics, and generative features will only continue to evolve, so be sure to keep checking back as we continue to release regular updates!",
   "version": "0.1.0",
+  "downloadLink": "https://nyric-download.lamina1.network/s/66mmPj3H32g5CKD/download/nyric.zip",
   "creator": {
     "name": "Lovelace Studio",
     "link": "https://lovelacestudio.com/",
