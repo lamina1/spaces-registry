@@ -9,6 +9,10 @@ const DEPLOY_KEY =
   process.env.DEPLOY_KEY ||
   "0x56289e99c94b6912bfc12adc093c9b51124f0dc54ac7a766b2bc5ccf558d8027";
 
+const LASERS_KEY =
+  process.env.LASERS_KEY ||
+  "0x56289e99c94b6912bfc12adc093c9b51124f0dc54ac7a766b2bc5ccf558d8027";
+
 const config: HardhatUserConfig = {
   solidity: {
     version: "0.8.19",
@@ -39,7 +43,7 @@ const config: HardhatUserConfig = {
     // Lamina1 betanet
     betanet: {
       url: "https://rpc-betanet.lamina1.com/ext/bc/C/rpc",
-      accounts: [DEPLOY_KEY],
+      accounts: [DEPLOY_KEY, LASERS_KEY],
     },
     spacestestnet: {
       url: "https://spaces-test.lamina1.network/rpc",
