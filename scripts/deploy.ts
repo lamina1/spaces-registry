@@ -60,8 +60,7 @@ async function main() {
   const info: SpaceInfoStruct = {
     name: "Space Lasers",
     url: "https://spacelasers.io/",
-    metadata:
-      "ipfs://bafkreigg7mpuwarmmbnpqx5xnfltkzdi6id3ej5mh3jue3sdj7a7k5mhiq",
+    metadata: "ipfs://QmY6RwNZjgcmG9uTbhVFNQGMcSB2ojmQLm81JsFcfAi6Ty",
     active: true,
   };
 
@@ -162,8 +161,7 @@ async function main() {
   const info2: SpaceInfoStruct = {
     name: "LAMINA1 Studio",
     url: "https://hub.lamina1.com/studio",
-    metadata:
-      "ipfs://bafkreieozjwuqoyy65zuggok7kk4ttyhwbaunnyqwfpioiivej3vxqrz3a",
+    metadata: "ipfs://QmeTg6k3N1mxBSxNhLBXojoQnWj7iauVo3bofvCQYvbfot",
     active: true,
   };
 
